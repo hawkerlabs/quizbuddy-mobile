@@ -1,2 +1,2 @@
-rootProject.name='QuizzWhizz'
+rootProject.name='Quiz Buddy'
 include ':app'
