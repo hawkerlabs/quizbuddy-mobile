@@ -24,13 +24,14 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.258" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <LinearLayout
                 android:id="@+id/optionsList"
                 android:layout_width="match_parent"
-                android:layout_height="251dp"
-                android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:background="@color/colorPrimary"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_8"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:padding="42dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -38,8 +39,77 @@
                 app:layout_constraintTop_toBottomOf="@+id/questionText"
                 app:layout_constraintVertical_bias="0.109">
 
+                <RadioGroup
+                    android:id="@+id/optionsGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:padding="40dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
 
-            </androidx.recyclerview.widget.RecyclerView>
+                    <RadioButton
+                        android:id="@+id/paypal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Paypal"
+                        android:textAlignment="viewStart"
+                        android:textSize="@dimen/font_body_size" />
+
+                    <RadioButton
+                        android:id="@+id/stripe"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Stripe"
+                        android:textAlignment="viewStart"
+                        android:textSize="@dimen/font_body_size" />
+
+                    <RadioButton
+                        android:id="@+id/banktransfer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Bank Transfer"
+                        android:textAlignment="viewStart"
+                        android:textSize="@dimen/font_body_size" />
+
+                    <RadioButton
+                        android:id="@+id/cod"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Cash On Delivery"
+                        android:textAlignment="viewStart"
+                        android:textSize="@dimen/font_body_size" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/optionsList"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="251dp"-->
+<!--                android:orientation="vertical"-->
+<!--                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+<!--                android:background="@color/colorPrimary"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintHorizontal_bias="0.0"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/questionText"-->
+<!--                app:layout_constraintVertical_bias="0.109">-->
+
+
+<!--            </androidx.recyclerview.widget.RecyclerView>-->
 
             <Button
                 android:id="@+id/button"

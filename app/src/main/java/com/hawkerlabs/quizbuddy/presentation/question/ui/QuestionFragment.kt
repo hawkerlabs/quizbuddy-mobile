@@ -4,21 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.LinearLayout
+import android.widget.RadioButton
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import com.hawkerlabs.quizbuddy.R
 import com.hawkerlabs.quizbuddy.core.dagger.ViewModelFactory
 import com.hawkerlabs.quizbuddy.databinding.QuestionFragmentBinding
+import com.hawkerlabs.quizbuddy.presentation.question.viewmodel.OptionsListItemViewModel
 import com.hawkerlabs.quizbuddy.presentation.question.viewmodel.QuestionViewModel
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.question_fragment.*
 import javax.inject.Inject
+
 
 class QuestionFragment : DaggerFragment(){
 
-    private lateinit var optionsAdapter: OptionsAdapter
+//    private lateinit var optionsAdapter: OptionsAdapter
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -49,7 +52,17 @@ class QuestionFragment : DaggerFragment(){
     }
 
     private fun initUi() {
-        optionsAdapter = OptionsAdapter()
+//        optionsAdapter = OptionsAdapter()
+        binding.optionsGroup.orientation = LinearLayout.HORIZONTAL;
+        val rbn = RadioButton(activity)
+
+        rbn.id = View.generateViewId()
+        rbn.text = "it.text"
+
+       var  params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+        binding.optionsGroup.layoutParams = params
+        binding.optionsGroup.addView(rbn)
+        binding.optionsGroup.addView(rbn)
     }
 
 
@@ -57,11 +70,19 @@ class QuestionFragment : DaggerFragment(){
      *
      */
     private fun  subscribeUi(){
+        val rbn = RadioButton(activity)
         questionViewModel.getQuestion.observe(viewLifecycleOwner, Observer{question->
             binding.questionText.text = question.questionText
 
-            binding.optionsList.adapter = optionsAdapter
-            optionsAdapter.setOptions(question.options)
+
+//            question.options.map {
+//                rbn.id = View.generateViewId()
+//                rbn.text = it.text
+//
+//                binding.optionsGroup.addView(rbn)
+//            }
+//            binding.optionsList.adapter = optionsAdapter
+//            optionsAdapter.setOptions(question.options)
 
         })
 

@@ -10,7 +10,7 @@ import com.hawkerlabs.quizbuddy.databinding.OptionsListItemBinding
 import com.hawkerlabs.quizbuddy.presentation.question.viewmodel.OptionsListItemViewModel
 
 class OptionsAdapter() : RecyclerView.Adapter<OptionsAdapter.ViewHolder>(){
-    private var optionViewModels : List<OptionsListItemViewModel> = emptyList()
+    private var optionViewModels = mutableListOf<OptionsListItemViewModel>()
 
 
 
@@ -19,12 +19,15 @@ class OptionsAdapter() : RecyclerView.Adapter<OptionsAdapter.ViewHolder>(){
      *
      */
     public fun setOptions(options: Set<Option>) {
-         var viewModelList = mutableListOf<OptionsListItemViewModel>()
-        options.forEach { option ->
-            viewModelList.add(OptionsListItemViewModel(option))
-         }
-        optionViewModels = viewModelList
+//         var viewModelList = mutableListOf<OptionsListItemViewModel>()
+//
+//        optionViewModels = viewModelList
+        optionViewModels.clear()
 
+
+        options.forEach { option ->
+            optionViewModels.add(OptionsListItemViewModel(option))
+        }
 
         notifyDataSetChanged()
     }
