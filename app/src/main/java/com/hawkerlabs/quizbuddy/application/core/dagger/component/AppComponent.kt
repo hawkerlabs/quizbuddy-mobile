@@ -1,10 +1,7 @@
-package com.hawkerlabs.quizbuddy.core.dagger.component
+package com.hawkerlabs.quizbuddy.application.core.dagger.component
 
 import android.app.Application
-import com.hawkerlabs.quizbuddy.core.dagger.module.AppModule
-import com.hawkerlabs.quizbuddy.core.dagger.module.BindingModule
-import com.hawkerlabs.quizbuddy.core.dagger.module.ViewModelFactoryModule
-import com.hawkerlabs.quizbuddy.core.dagger.module.ViewModelModule
+import com.hawkerlabs.quizbuddy.application.core.dagger.module.*
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -20,7 +17,8 @@ import javax.inject.Singleton
         ViewModelFactoryModule::class,
         AppModule::class,
         ViewModelModule::class,
-        BindingModule::class
+        BindingModule::class,
+        UseCaseModule::class
 
     ]
 )

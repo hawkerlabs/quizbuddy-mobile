@@ -1,11 +1,10 @@
-package com.hawkerlabs.quizbuddy.core.dagger.module
+package com.hawkerlabs.quizbuddy.application.core.dagger.module
 
 import com.hawkerlabs.quizbuddy.MainActivity
 import com.hawkerlabs.quizbuddy.presentation.category.ui.CategoryFragment
 import com.hawkerlabs.quizbuddy.presentation.question.ui.QuestionFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import dagger.android.support.DaggerFragment
 
 @Module
 abstract class BindingModule {

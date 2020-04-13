@@ -11,11 +11,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.hawkerlabs.quizbuddy.R
-import com.hawkerlabs.quizbuddy.core.dagger.ViewModelFactory
+import com.hawkerlabs.quizbuddy.application.core.ViewModelFactory
 import com.hawkerlabs.quizbuddy.databinding.QuestionFragmentBinding
 import com.hawkerlabs.quizbuddy.presentation.question.viewmodel.QuestionViewModel
 import com.hawkerlabs.quizbuddy.presentation.session.SessionViewModel
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.question_fragment.*
 import javax.inject.Inject
 
 
@@ -69,6 +70,10 @@ class QuestionFragment : DaggerFragment(){
 //        binding.optionsGroup.layoutParams = params
 //        binding.optionsGroup.addView(rbn)
 //        binding.optionsGroup.addView(rbn2)
+
+        submitAnswer.setOnClickListener{
+            questionViewModel.onNext()
+        }
     }
 
 
@@ -80,7 +85,7 @@ class QuestionFragment : DaggerFragment(){
         questionViewModel.getQuestion.observe(viewLifecycleOwner, Observer{question->
             binding.questionText.text = question.questionText
 
-
+            binding.optionsGroup.removeAllViews()
             question.options.map {
                 val rbn = RadioButton(activity)
                 rbn.id = it.id
@@ -101,6 +106,15 @@ class QuestionFragment : DaggerFragment(){
                 })
 
         })
+
+
+        questionViewModel.isFinishTest.observe(viewLifecycleOwner ,Observer{
+            if(it){
+                it
+            }
+        }
+
+        )
 
     }
 

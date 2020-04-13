@@ -112,7 +112,7 @@
 <!--            </androidx.recyclerview.widget.RecyclerView>-->
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/submitAnswer"
                 android:layout_width="263dp"
                 android:layout_height="55dp"
                 android:text="Submit Answer"

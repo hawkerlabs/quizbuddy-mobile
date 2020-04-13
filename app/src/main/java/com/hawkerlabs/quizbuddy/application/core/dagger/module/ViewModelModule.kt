@@ -1,7 +1,7 @@
-package com.hawkerlabs.quizbuddy.core.dagger.module
+package com.hawkerlabs.quizbuddy.application.core.dagger.module
 
 import androidx.lifecycle.ViewModel
-import com.hawkerlabs.quizbuddy.core.dagger.ViewModelKey
+import com.hawkerlabs.quizbuddy.application.core.ViewModelKey
 import com.hawkerlabs.quizbuddy.presentation.question.viewmodel.QuestionViewModel
 import com.hawkerlabs.quizbuddy.presentation.session.SessionViewModel
 import dagger.Binds

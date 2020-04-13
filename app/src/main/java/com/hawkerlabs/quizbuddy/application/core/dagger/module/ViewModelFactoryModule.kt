@@ -1,7 +1,7 @@
-package com.hawkerlabs.quizbuddy.core.dagger.module
+package com.hawkerlabs.quizbuddy.application.core.dagger.module
 
 import androidx.lifecycle.ViewModelProvider
-import com.hawkerlabs.quizbuddy.core.dagger.ViewModelFactory
+import com.hawkerlabs.quizbuddy.application.core.ViewModelFactory
 import dagger.Binds
 import dagger.Module
 

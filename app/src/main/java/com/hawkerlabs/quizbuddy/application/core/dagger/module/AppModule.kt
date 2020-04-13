@@ -1,4 +1,4 @@
-package com.hawkerlabs.quizbuddy.core.dagger.module
+package com.hawkerlabs.quizbuddy.application.core.dagger.module
 
 import dagger.Module
 import dagger.Provides
