@@ -41,10 +41,7 @@ class QuestionViewModel @Inject constructor(private val sessionUseCase : Session
 
 
     init{
-//       var options  = mutableSetOf<Option>()
-//        options.add(Option(21, "1st question", false))
-//        options.add(Option(2, "2nd question", false))
-//        _question.value =  Question("someId", "WHat is something?", options)
+
 
 
         getNextQuestion()

@@ -8,17 +8,37 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-        <TextView
-            android:id="@+id/resultText"
+
+        <LinearLayout
+            android:id="@+id/optionsList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Results Fragment"
+            android:layout_marginTop="@dimen/space_8"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:padding="42dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+            <TextView
+                android:id="@+id/resultText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Results Fragment"
+               >
 
-        </TextView>
+            </TextView>
+
+            <Button
+                android:id="@+id/finish"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Finish">
+
+            </Button>
+        </LinearLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

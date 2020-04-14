@@ -38,6 +38,7 @@ class ResultsFragment : DaggerFragment(){
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initViewModels()
+        initUi()
         binding.resultText.text = "You got " +QuestionsManager.correctAnswerCount + " right"
     }
 
@@ -53,5 +54,11 @@ class ResultsFragment : DaggerFragment(){
         }
 
 
+    }
+
+    private fun initUi(){
+        finish.setOnClickListener{
+            Navigation.findNavController(binding.root).navigate(R.id.categoryFragment)
+        }
     }
 }
