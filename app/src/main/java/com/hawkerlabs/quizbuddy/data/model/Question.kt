@@ -7,5 +7,6 @@ package com.hawkerlabs.quizbuddy.data.model
 data class Question(
     val id: String,
     val questionText : String,
-    val options: Set<Option>
+    val options: Set<Option>,
+    val correctAnswer : Int
 )

@@ -3,6 +3,7 @@ package com.hawkerlabs.quizbuddy.application.core.dagger.module
 import androidx.lifecycle.ViewModel
 import com.hawkerlabs.quizbuddy.application.core.ViewModelKey
 import com.hawkerlabs.quizbuddy.presentation.question.viewmodel.QuestionViewModel
+import com.hawkerlabs.quizbuddy.presentation.result.viewmodel.ResultsViewModel
 import com.hawkerlabs.quizbuddy.presentation.session.SessionViewModel
 import dagger.Binds
 import dagger.Module
@@ -21,7 +22,10 @@ abstract class ViewModelModule {
     @ViewModelKey(SessionViewModel::class)
     internal abstract  fun bindSessionViewModel(viewModel: SessionViewModel) : ViewModel
 
-
+    @Binds
+    @IntoMap
+    @ViewModelKey(ResultsViewModel::class)
+    internal abstract  fun bindResultsViewModel(viewModel: ResultsViewModel) : ViewModel
 
 
 }

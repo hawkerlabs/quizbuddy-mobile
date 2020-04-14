@@ -10,6 +10,7 @@ import android.widget.RadioGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import com.hawkerlabs.quizbuddy.R
 import com.hawkerlabs.quizbuddy.application.core.ViewModelFactory
 import com.hawkerlabs.quizbuddy.databinding.QuestionFragmentBinding
@@ -72,6 +73,7 @@ class QuestionFragment : DaggerFragment(){
 //        binding.optionsGroup.addView(rbn2)
 
         submitAnswer.setOnClickListener{
+            questionViewModel.onSubmit()
             questionViewModel.onNext()
         }
     }
@@ -90,7 +92,6 @@ class QuestionFragment : DaggerFragment(){
                 val rbn = RadioButton(activity)
                 rbn.id = it.id
                 rbn.text = it.text
-
                 rbn.typeface = Typeface.create("roboto_medium", Typeface.NORMAL)
 
 
@@ -102,7 +103,9 @@ class QuestionFragment : DaggerFragment(){
 
             binding.optionsGroup.setOnCheckedChangeListener(
                 RadioGroup.OnCheckedChangeListener { _, checkedId ->
-                    checkedId
+
+                    questionViewModel.onOptionSelect(checkedId)
+
                 })
 
         })
@@ -110,7 +113,8 @@ class QuestionFragment : DaggerFragment(){
 
         questionViewModel.isFinishTest.observe(viewLifecycleOwner ,Observer{
             if(it){
-                it
+
+                Navigation.findNavController(binding.root).navigate(R.id.resultsFragment)
             }
         }
 

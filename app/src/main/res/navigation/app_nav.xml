@@ -14,5 +14,13 @@
     <fragment
         android:id="@+id/questionFragment"
         android:name="com.hawkerlabs.quizbuddy.presentation.question.ui.QuestionFragment"
-        android:label="QuestionFragment" />
+        android:label="QuestionFragment" >
+        <action
+            android:id="@+id/action_questionFragment_to_resultsFragment"
+            app:destination="@id/resultsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/resultsFragment"
+        android:name="com.hawkerlabs.quizbuddy.presentation.result.ui.ResultsFragment"
+        android:label="ResultsFragment" />
 </navigation>

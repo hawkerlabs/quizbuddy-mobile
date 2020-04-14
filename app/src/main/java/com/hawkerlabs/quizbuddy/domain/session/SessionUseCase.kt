@@ -12,6 +12,8 @@ interface SessionUseCase {
 
      fun getNextQuestion(): Single<Question>
 
+     fun onAnswerSubmit(selectedId : Int )
+
 
     fun getSessionState(): Single<SessionState>
 

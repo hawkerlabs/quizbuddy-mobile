@@ -10,10 +10,9 @@ import javax.inject.Inject
 class SessionUseCaseImpl @Inject constructor(): SessionUseCase {
 
     private var questions = listOf<Question>()
-    private val questionsIterator : Iterator<Question>  = questions.iterator()
 
 
-
+    private var correctAnswerCount : Int = 0
 
 
     /**
@@ -22,11 +21,25 @@ class SessionUseCaseImpl @Inject constructor(): SessionUseCase {
     override fun getNextQuestion(): Single<Question> {
 
         if(QuestionsManager.getQuestionsIterator().hasNext()){
-            return Single.just(QuestionsManager.getQuestionsIterator().next())
+            var question = QuestionsManager.getQuestionsIterator().next()
+            QuestionsManager.currentQuestion = question
+            return Single.just(question)
         }
 
-            return Single.just(Question("", "", emptySet()))
+            return Single.just(Question("", "", emptySet(), -1))
 
+    }
+
+
+    /**
+     * Update the correct answer count
+     */
+    override fun onAnswerSubmit( selectedId: Int) {
+
+       if( QuestionsManager.currentQuestion?.correctAnswer == selectedId){
+//           correctAnswerCount++
+           QuestionsManager.correctAnswerCount++
+       }
     }
 
     override fun getSessionState(): Single<SessionState> {

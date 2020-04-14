@@ -14,7 +14,7 @@ import io.reactivex.Scheduler
 import javax.inject.Inject
 import javax.inject.Named
 
-class SessionViewModel @Inject constructor(private val getQuestionsUseCase: GetQuestionsUseCase, @Named(SCHEDULER_IO) val subscribeOnScheduler: Scheduler,
+class SessionViewModel @Inject constructor( @Named(SCHEDULER_IO) val subscribeOnScheduler: Scheduler,
                                            @Named(SCHEDULER_MAIN_THREAD) val observeOnScheduler: Scheduler
 ): ViewModel(){
 
@@ -35,10 +35,10 @@ class SessionViewModel @Inject constructor(private val getQuestionsUseCase: GetQ
 
     @SuppressLint("CheckResult")
     private fun initialize(){
-        getQuestionsUseCase.invoke()
-            .subscribeOn(subscribeOnScheduler)
-            .observeOn(observeOnScheduler)
-            .subscribe(this::onResponse, this::onError)
+//        getQuestionsUseCase.invoke()
+//            .subscribeOn(subscribeOnScheduler)
+//            .observeOn(observeOnScheduler)
+//            .subscribe(this::onResponse, this::onError)
     }
 
 
