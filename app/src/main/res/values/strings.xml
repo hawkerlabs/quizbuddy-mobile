@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Quiz Buddy</string>
+
+    <string name="world_knowledge">World Knowledge</string>
 </resources>

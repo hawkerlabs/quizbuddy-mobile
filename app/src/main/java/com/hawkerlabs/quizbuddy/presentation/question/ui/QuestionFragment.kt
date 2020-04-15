@@ -95,30 +95,7 @@ class QuestionFragment : DaggerFragment(){
         })
 
 
-//        sessionViewModel.getQuestion.observe(viewLifecycleOwner, Observer{question->
-//            binding.questionText.text = question.questionText
-//
-//            binding.optionsGroup.removeAllViews()
-//            question.options.map {
-//                val rbn = RadioButton(activity)
-//                rbn.id = it.id
-//                rbn.text = it.text
-//                rbn.typeface = Typeface.create("roboto_medium", Typeface.NORMAL)
-//
-//
-//                binding.optionsGroup.addView(rbn)
-//            }
-//
-//
-//
-//            binding.optionsGroup.setOnCheckedChangeListener(
-//                RadioGroup.OnCheckedChangeListener { _, checkedId ->
-//
-//                    sessionViewModel.onOptionSelect(checkedId)
-//
-//                })
-//
-//        })
+
 
 
         sessionViewModel.getTestState.observe(viewLifecycleOwner ,Observer{
@@ -140,6 +117,7 @@ class QuestionFragment : DaggerFragment(){
 
 
         }
+        sessionViewModel.onNewSession()
 
 
     }

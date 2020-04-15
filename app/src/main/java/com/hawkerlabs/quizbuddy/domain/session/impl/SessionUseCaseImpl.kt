@@ -15,6 +15,7 @@ class SessionUseCaseImpl @Inject constructor(): SessionUseCase {
     private var correctAnswerCount : Int = 0
 
 
+
     /**
      *
      */
@@ -25,6 +26,7 @@ class SessionUseCaseImpl @Inject constructor(): SessionUseCase {
             QuestionsManager.currentQuestion = question
             return Single.just(question)
         }
+
 
             return Single.just(Question("", "", emptySet(), -1))
 
@@ -44,5 +46,15 @@ class SessionUseCaseImpl @Inject constructor(): SessionUseCase {
     override fun getSessionState(): Single<Session> {
         TODO("Not yet implemented")
     }
+
+
+    /**
+     *
+     */
+    override fun initSession() {
+        QuestionsManager.initialize()
+        correctAnswerCount = 0
+    }
+
 
 }

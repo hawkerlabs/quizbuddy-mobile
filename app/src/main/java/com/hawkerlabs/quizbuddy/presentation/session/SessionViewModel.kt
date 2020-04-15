@@ -38,7 +38,7 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
         get() = _session
 
     init{
-        getNextQuestion()
+//        getNextQuestion()
     }
 
     @SuppressLint("CheckResult")
@@ -82,9 +82,18 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
         } else {
             _session.value = Session(true, question, 0, false )
 
-//            _question.value = question
         }
 
+    }
+
+
+    fun onFinishTest(){
+        sessionUseCase.initSession()
+    }
+
+    fun onNewSession(){
+        _finishTest.value = false
+        getNextQuestion()
     }
 
     fun onSubmit(){

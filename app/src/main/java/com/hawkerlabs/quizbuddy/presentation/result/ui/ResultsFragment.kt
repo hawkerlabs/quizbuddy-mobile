@@ -10,12 +10,9 @@ import androidx.navigation.Navigation
 import com.hawkerlabs.quizbuddy.R
 import com.hawkerlabs.quizbuddy.application.core.ViewModelFactory
 import com.hawkerlabs.quizbuddy.data.QuestionsManager
-import com.hawkerlabs.quizbuddy.databinding.QuestionFragmentBinding
 import com.hawkerlabs.quizbuddy.databinding.ResultFragmentBinding
-import com.hawkerlabs.quizbuddy.presentation.question.viewmodel.QuestionViewModel
 import com.hawkerlabs.quizbuddy.presentation.session.SessionViewModel
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.category_fragment.*
 import kotlinx.android.synthetic.main.result_fragment.*
 import javax.inject.Inject
 
@@ -39,6 +36,7 @@ class ResultsFragment : DaggerFragment(){
         super.onActivityCreated(savedInstanceState)
         initViewModels()
         initUi()
+        sessionViewModel
         binding.resultText.text = "You got " +QuestionsManager.correctAnswerCount + " right"
     }
 
@@ -57,7 +55,9 @@ class ResultsFragment : DaggerFragment(){
     }
 
     private fun initUi(){
+
         finish.setOnClickListener{
+            sessionViewModel.onFinishTest()
             Navigation.findNavController(binding.root).navigate(R.id.categoryFragment)
         }
     }

@@ -21,6 +21,7 @@ object QuestionsManager{
 
 
     fun initialize(){
+        questions.clear() //just mocking
         var options  = mutableSetOf<Option>()
         options.add(Option(1, "Milan", false))
         options.add(Option(2, "Pisa", false))
@@ -48,6 +49,7 @@ object QuestionsManager{
         questions.add(Question("someId3", "Who is the current Prime Minister of Australia?", options3, 1))
 
         questionsIterator = questions.iterator()
+        correctAnswerCount = 0
     }
 
 

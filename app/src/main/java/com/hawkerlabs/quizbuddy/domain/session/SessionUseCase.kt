@@ -8,7 +8,7 @@ interface SessionUseCase {
 
 //     fun getAllQuestions(): Single<List<Question>>
 
-
+    fun initSession()
 
      fun getNextQuestion(): Single<Question>
 
