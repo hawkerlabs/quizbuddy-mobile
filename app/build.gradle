@@ -39,6 +39,9 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:${versions.rxAndroid}"
     implementation "com.jakewharton.timber:timber:${versions.timber}"
 
+    //Glide for images
+    implementation "com.github.bumptech.glide:glide:${versions.glide}"
+    annotationProcessor "com.github.bumptech.glide:compiler:${versions.glide}"
 
     //Dagger
     implementation "com.google.dagger:dagger:${versions.dagger}"
