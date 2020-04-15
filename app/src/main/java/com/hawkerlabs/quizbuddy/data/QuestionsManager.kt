@@ -42,7 +42,7 @@ object QuestionsManager{
         options3.add(Option(4, "Julia Gillard", false))
 
 
-        questions.add(Question("someId1", "Which Italian city has a leaning tower?", options, 2))
+        questions.add(Question("someId1", "Which Italian city has the leaning tower?", options, 2))
         questions.add(Question("someId2", "What is the capital city of Argentina?", options1, 1))
 
 
