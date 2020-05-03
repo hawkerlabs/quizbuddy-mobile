@@ -56,17 +56,7 @@ class CategoryFragment : DaggerFragment() {
      *
      */
     private fun initUi(){
-        Glide.with(binding.root.context)
-            .asBitmap()
-            .load(Images.CATEGORIES)
-            .centerCrop()
-            .into(binding.courseImageView)
 
-
-        world_knowledge_view.setOnClickListener{
-            Navigation.findNavController(binding.root).navigate(R.id.questionFragment)
-
-        }
     }
 
     private fun initViewModels() {
