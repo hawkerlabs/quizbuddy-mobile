@@ -36,6 +36,14 @@ class CategoriesListAdapter :  RecyclerView.Adapter<CategoriesListAdapter.ViewHo
     }
 
 
+    /**
+     *
+     */
+    public fun onResults(categories: List<CategoriesListItemViewModel>) {
+        this.categories = categories
+        notifyDataSetChanged()
+    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val categoriesListItemViewModel = categories[position]
         holder.bind(categoriesListItemViewModel)
@@ -57,15 +65,15 @@ class CategoriesListAdapter :  RecyclerView.Adapter<CategoriesListAdapter.ViewHo
                     .asBitmap()
                     .load(categoriesListItemViewModel.image)
                     .centerCrop()
-                    .apply(
-                        bitmapTransform(
-                            RoundedCornersTransformation(
-                                20,
-                                5,
-                                RoundedCornersTransformation.CornerType.ALL
-                            )
-                        )
-                    )
+//                    .apply(
+//                        bitmapTransform(
+//                            RoundedCornersTransformation(
+//                                20,
+//                                5,
+//                                RoundedCornersTransformation.CornerType.ALL
+//                            )
+//                        )
+//                    )
                     .into(binding.categoryImage)
                 viewModel = categoriesListItemViewModel
 

@@ -12,19 +12,22 @@
             type="com.hawkerlabs.quizbuddy.presentation.category.viewmodel.CategoriesListItemViewModel" />
 
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
-       android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="218dp">
 
 
         <androidx.cardview.widget.CardView
             android:id="@+id/world_knowledge_view"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="9dp"
+
+            android:layout_marginBottom="9dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="3dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -43,48 +46,54 @@
                     android:id="@+id/imageCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
+
 
                     app:cardCornerRadius="5dp"
                     app:cardElevation="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    >
+                    app:layout_constraintTop_toTopOf="parent">
+
 
                     <ImageView
 
                         android:id="@+id/categoryImage"
                         android:layout_width="match_parent"
-                        android:layout_height="150dp"
+                        android:layout_height="218dp"
                         android:scaleType="centerCrop"
                         app:srcCompat="@drawable/baseline_image_black_24" />
 
+                    <ImageView
+                        android:id="@+id/bgImageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        app:layout_constraintBottom_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/dividerView"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/black_alpha_45" />
 
-
+                    <TextView
+                        android:id="@+id/placeNameTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="18dp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/roboto"
+                        android:maxLines="1"
+                        android:text="@{viewModel.name}"
+                        android:textColor="@color/md_white_1000"
+                        android:textSize="@dimen/font_title_size" />
                 </androidx.cardview.widget.CardView>
 
 
-                <TextView
-                    android:id="@+id/categoryName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:text="@{viewModel.name}"
-                    android:textSize="@dimen/font_body_size"
-                    android:textColor="@color/md_grey_600"
-                    app:layout_constraintBottom_toBottomOf="parent"
-
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.06"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/imageCard"
-                    app:layout_constraintVertical_bias="0.0" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
         </androidx.cardview.widget.CardView>

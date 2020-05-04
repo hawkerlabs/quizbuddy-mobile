@@ -8,7 +8,9 @@ import javax.inject.Inject
 
 class CategoriesRepositoryImpl @Inject constructor(private val categoriesApi: CategoriesApi): CategoriesRepository {
     override fun getCategories(): Single<List<Category>> {
-        TODO("Not yet implemented")
+        return categoriesApi.getCategories().map {
+            it.data
+        }
     }
 
 }

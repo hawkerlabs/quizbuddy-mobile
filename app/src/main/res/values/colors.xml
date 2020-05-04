@@ -6,6 +6,7 @@
 
     <color name="md_grey_600">#757575</color>
 
+    <color name="md_white_1000">#FFFFFF</color>
 
     <color name="blue_grey_600">#546E7A</color>
 </resources>
