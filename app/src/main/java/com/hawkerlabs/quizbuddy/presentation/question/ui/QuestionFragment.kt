@@ -33,6 +33,8 @@ class QuestionFragment : DaggerFragment(){
 
     private lateinit var sessionViewModel: SessionViewModel
 
+
+
     private lateinit var binding: QuestionFragmentBinding
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,7 +44,7 @@ class QuestionFragment : DaggerFragment(){
         binding = DataBindingUtil.inflate(inflater, R.layout.question_fragment, container, false)
 
 
-
+        val url = arguments?.getString("categoryId") ?: ""
         return binding.root
     }
 
