@@ -23,7 +23,7 @@ class SessionUseCaseImpl @Inject constructor(
 
     private var questions = listOf<Question>()
 
-    private var questionsIterator : Iterator<Question> = questions.iterator()
+    private lateinit var questionsIterator : Iterator<Question>
     private var correctAnswerCount: Int = 0
 
 
@@ -64,10 +64,13 @@ class SessionUseCaseImpl @Inject constructor(
     /**
      *
      */
-    override fun initSession() {
+    override fun initSession(questionSet: List<Question>) {
 
 
-        QuestionsManager.initialize()
+//        QuestionsManager.initialize()
+
+        questions = questionSet
+        questionsIterator = questions.iterator()
         correctAnswerCount = 0
     }
 

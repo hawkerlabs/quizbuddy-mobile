@@ -6,15 +6,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hawkerlabs.quizbuddy.application.core.dagger.module.SCHEDULER_IO
 import com.hawkerlabs.quizbuddy.application.core.dagger.module.SCHEDULER_MAIN_THREAD
+import com.hawkerlabs.quizbuddy.data.api.model.Category
+import com.hawkerlabs.quizbuddy.data.api.model.question.Question
 
-import com.hawkerlabs.quizbuddy.data.model.Question
 import com.hawkerlabs.quizbuddy.data.model.Session
+import com.hawkerlabs.quizbuddy.domain.question.GetQuestionsByCategoryUseCase
 import com.hawkerlabs.quizbuddy.domain.session.SessionUseCase
+import com.hawkerlabs.quizbuddy.presentation.category.viewmodel.CategoriesListItemViewModel
 import io.reactivex.Scheduler
 import javax.inject.Inject
 import javax.inject.Named
 
 class SessionViewModel @Inject constructor(private val sessionUseCase : SessionUseCase,
+                                           private val getQuestionsByCategoryUseCase : GetQuestionsByCategoryUseCase,
                                            @Named(SCHEDULER_IO) val subscribeOnScheduler: Scheduler,
                                            @Named(SCHEDULER_MAIN_THREAD) val observeOnScheduler: Scheduler
 ): ViewModel(){
@@ -37,31 +41,13 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
     val getSession: LiveData<Session>
         get() = _session
 
-    init{
-//        getNextQuestion()
-    }
 
-    @SuppressLint("CheckResult")
-    private fun initialize(){
-
-        sessionUseCase.getNextQuestion().subscribeOn(subscribeOnScheduler)
-            .observeOn(observeOnScheduler)
-            .subscribe(this::onTestStart, this::onError)
-
-    }
-
-    private fun onTestStart(question: Question){
-
-        //Create a new session
-        _session.value = Session(true, question, 0, false )
-
-    }
 
     @SuppressLint("CheckResult")
     private fun getNextQuestion(){
         sessionUseCase.getNextQuestion().subscribeOn(subscribeOnScheduler)
             .observeOn(observeOnScheduler)
-            .subscribe(this::onResponse, this::onError)
+            .subscribe(this::onQuestionResponse, this::onError)
     }
 
     fun onOptionSelect(selectedId :Int ){
@@ -74,27 +60,45 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
     }
 
 
-    private fun onResponse(question: Question) {
-        if(question.questionText.isEmpty()){
-            _finishTest.value = true
+    private fun onQuestionResponse(question : Question){
 
-            _session.value = Session(false, question, 0, true )
-        } else {
-            _session.value = Session(true, question, 0, false )
+//        val currentQuestion =  com.hawkerlabs.quizbuddy.data.model.Question(question.id, question.question, question.question)
+//        _session.value = Session(true, Question(), 0, false )
 
-        }
+    }
+
+    private fun onResponse(questions: List<Question>) {
+
+
+        sessionUseCase.initSession(questions)
+        getNextQuestion()
+//        if(question.questionText.isEmpty()){
+//            _finishTest.value = true
+//
+//            _session.value = Session(false, question, 0, true )
+//        } else {
+//            _session.value = Session(true, question, 0, false )
+//
+//        }
 
     }
 
 
     fun onFinishTest(){
-        sessionUseCase.initSession()
+//        sessionUseCase.initSession()
     }
 
-    fun onNewSession(){
+    @SuppressLint("CheckResult")
+    fun onNewSession(categoryId : String){
         _finishTest.value = false
-        getNextQuestion()
+        getQuestionsByCategoryUseCase.invoke(categoryId).subscribeOn(subscribeOnScheduler)
+            .observeOn(observeOnScheduler)
+            .subscribe(this::onResponse, this::onError)
+
     }
+
+
+
 
     fun onSubmit(){
         sessionUseCase.onAnswerSubmit (selectedId)
