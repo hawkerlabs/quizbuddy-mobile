@@ -3,13 +3,12 @@ package com.hawkerlabs.quizbuddy.domain.session.impl
 import android.annotation.SuppressLint
 import com.hawkerlabs.quizbuddy.application.core.dagger.module.SCHEDULER_IO
 import com.hawkerlabs.quizbuddy.application.core.dagger.module.SCHEDULER_MAIN_THREAD
-import com.hawkerlabs.quizbuddy.data.QuestionsManager
-import com.hawkerlabs.quizbuddy.data.api.model.Category
-import com.hawkerlabs.quizbuddy.data.api.model.question.Question
+import com.hawkerlabs.quizbuddy.data.api.model.question.Data
+import com.hawkerlabs.quizbuddy.data.model.Question
+import com.hawkerlabs.quizbuddy.data.model.Result
 import com.hawkerlabs.quizbuddy.data.model.Session
 import com.hawkerlabs.quizbuddy.domain.question.GetQuestionsByCategoryUseCase
 import com.hawkerlabs.quizbuddy.domain.session.SessionUseCase
-import com.hawkerlabs.quizbuddy.presentation.category.viewmodel.CategoriesListItemViewModel
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import javax.inject.Inject
@@ -21,18 +20,19 @@ class SessionUseCaseImpl @Inject constructor(
     @Named(SCHEDULER_MAIN_THREAD) val observeOnScheduler: Scheduler
 ) : SessionUseCase {
 
-    private var questions = listOf<Question>()
+    private var questions = listOf<Data>()
 
-    private lateinit var questionsIterator : Iterator<Question>
+    private lateinit var questionsIterator : Iterator<Data>
     private var correctAnswerCount: Int = 0
 
+    private lateinit var result: Result
 
-    var currentQuestion : Question? = null
+    var currentQuestion : Data? = null
 
     /**
      *
      */
-    override fun getNextQuestion(): Single<Question> {
+    override fun getNextQuestion(): Single<Data> {
 
         if (questionsIterator.hasNext()) {
             var question = questionsIterator.next()
@@ -40,8 +40,7 @@ class SessionUseCaseImpl @Inject constructor(
             return Single.just(question)
         }
 
-    return Single.just(Question())
-//        return Single.just(Question("", "", emptySet(), -1))
+    return Single.just(Data())
 
     }
 
@@ -49,29 +48,37 @@ class SessionUseCaseImpl @Inject constructor(
     /**
      * Update the correct answer count
      */
-    override fun onAnswerSubmit(selectedId: Int) {
+    override fun onAnswerSubmit(selectedId: Int, currentQuestion : Question) {
 
-        if (QuestionsManager.currentQuestion?.correctAnswer == selectedId) {
-            QuestionsManager.correctAnswerCount++
+        if (currentQuestion?.correctAnswer == selectedId) {
+
+            result.correctAnswerCount++
+            result.correctAnswers.add(currentQuestion)
+        } else {
+            result.inCorrectAnswers.add(currentQuestion)
         }
     }
 
-    override fun getSessionState(): Single<Session> {
-        TODO("Not yet implemented")
-    }
 
 
     /**
      *
      */
-    override fun initSession(questionSet: List<Question>) {
+    override fun getTestResults(): Single<Result> {
+        return Single.just(result)
+    }
 
 
-//        QuestionsManager.initialize()
+    /**
+     * Initialize test session
+     */
+    override fun initSession(questionSet: List<Data>) {
 
         questions = questionSet
         questionsIterator = questions.iterator()
         correctAnswerCount = 0
+
+        result = Result( mutableSetOf<Question>(), mutableSetOf<Question>(), 0, false )
     }
 
     @SuppressLint("CheckResult")
@@ -82,7 +89,7 @@ class SessionUseCaseImpl @Inject constructor(
     }
 
 
-    private fun onResponse(categories: List<Question>) {
+    private fun onResponse(categories: List<Data>) {
 //        categories.map { item ->
 //            _categoriesList.add(CategoriesListItemViewModel(item))
 //        }

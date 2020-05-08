@@ -1,6 +1,6 @@
 package com.hawkerlabs.quizbuddy.domain.question.impl
 
-import com.hawkerlabs.quizbuddy.data.api.model.question.Question
+import com.hawkerlabs.quizbuddy.data.api.model.question.Data
 import com.hawkerlabs.quizbuddy.data.repository.QuestionsRepository
 import com.hawkerlabs.quizbuddy.domain.question.GetQuestionsByCategoryUseCase
 import io.reactivex.Single
@@ -12,7 +12,7 @@ class GetQuestionsByCategoryUseCaseImpl @Inject constructor(private val question
     /**
      *
      */
-    override fun invoke(categoryId: String): Single<List<Question>> {
+    override fun invoke(categoryId: String): Single<List<Data>> {
        return questionsRepository.getQuestionsByCategory(categoryId)
     }
 

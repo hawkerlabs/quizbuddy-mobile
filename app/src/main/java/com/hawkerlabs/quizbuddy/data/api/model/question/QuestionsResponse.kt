@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class QuestionsResponse(
     @JsonProperty("data")
-    val data: List<Question> = listOf(),
+    val data: List<Data> = listOf(),
     @JsonProperty("success")
     val success: Boolean = false
 )

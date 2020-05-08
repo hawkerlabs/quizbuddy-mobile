@@ -5,20 +5,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.hawkerlabs.quizbuddy.R
 import com.hawkerlabs.quizbuddy.application.core.ViewModelFactory
-import com.hawkerlabs.quizbuddy.data.QuestionsManager
+import com.hawkerlabs.quizbuddy.data.model.CurrentOption
+import com.hawkerlabs.quizbuddy.data.model.Question
 import com.hawkerlabs.quizbuddy.databinding.ResultFragmentBinding
+import com.hawkerlabs.quizbuddy.presentation.result.viewmodel.ResultsListItemViewModel
+import com.hawkerlabs.quizbuddy.presentation.result.viewmodel.ResultsViewModel
 import com.hawkerlabs.quizbuddy.presentation.session.SessionViewModel
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.question_fragment.view.*
 import kotlinx.android.synthetic.main.result_fragment.*
 import javax.inject.Inject
 
 class ResultsFragment : DaggerFragment(){
     private lateinit var binding: ResultFragmentBinding
     private lateinit var sessionViewModel: SessionViewModel
+    private lateinit var resultsViewModel: ResultsViewModel
+
+    private var resultsAdapter = ResultsAdapter()
+
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     override fun onCreateView(
@@ -32,21 +41,45 @@ class ResultsFragment : DaggerFragment(){
         return binding.root
     }
 
+
+    /**
+     *
+     */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initViewModels()
         initUi()
-        sessionViewModel
-        binding.resultText.text = "You got " +QuestionsManager.correctAnswerCount + " right"
+        subscribeUi()
+
+
+
     }
 
 
+    /**
+     *
+     */
+    private fun subscribeUi() {
 
+        sessionViewModel.getResult.observe(viewLifecycleOwner, Observer { it ->
+            var results = mutableListOf<ResultsListItemViewModel>()
+            it.inCorrectAnswers.map { question ->
+                var option  = question.options.filter { option->
+                    option.isCorrectAnswer == true
+                }
+                results.add(ResultsListItemViewModel(question.questionText, option[0].text))
+
+            }
+            resultsAdapter.onResults(results)
+
+
+        })
+
+    }
     private fun initViewModels() {
 
         activity?.let {
             sessionViewModel = ViewModelProvider(it, viewModelFactory).get(SessionViewModel::class.java)
-
 
 
         }
@@ -55,10 +88,11 @@ class ResultsFragment : DaggerFragment(){
     }
 
     private fun initUi(){
+        list.adapter = resultsAdapter
 
-        finish.setOnClickListener{
-            sessionViewModel.onFinishTest()
-            Navigation.findNavController(binding.root).navigate(R.id.categoryFragment)
-        }
+//        finish.setOnClickListener{
+//            sessionViewModel.onFinishTest()
+//            Navigation.findNavController(binding.root).navigate(R.id.categoryFragment)
+//        }
     }
 }

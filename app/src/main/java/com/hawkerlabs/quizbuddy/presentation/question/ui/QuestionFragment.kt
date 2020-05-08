@@ -14,7 +14,6 @@ import androidx.navigation.Navigation
 import com.hawkerlabs.quizbuddy.R
 import com.hawkerlabs.quizbuddy.application.core.ViewModelFactory
 import com.hawkerlabs.quizbuddy.databinding.QuestionFragmentBinding
-import com.hawkerlabs.quizbuddy.presentation.question.viewmodel.QuestionViewModel
 import com.hawkerlabs.quizbuddy.presentation.session.SessionViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.question_fragment.*
@@ -73,13 +72,13 @@ class QuestionFragment : DaggerFragment(){
      */
     private fun  subscribeUi(){
 
-        sessionViewModel.getSession.observe(viewLifecycleOwner, Observer {
-            val question  = it.currentQuestion
-            binding.questionText.text = question.questionText
+        sessionViewModel.getCurrentQuestion.observe(viewLifecycleOwner, Observer {
+
+            binding.questionText.text = it.questionText
             binding.optionsGroup.removeAllViews()
 
 
-            it.currentQuestion.options.map {option->
+            it.options.map {option ->
                 val rbn = RadioButton(activity)
                 rbn.id = option.id
                 rbn.text = option.text
@@ -88,20 +87,22 @@ class QuestionFragment : DaggerFragment(){
 
                 binding.optionsGroup.addView(rbn)
             }
-
             binding.optionsGroup.setOnCheckedChangeListener(
                 RadioGroup.OnCheckedChangeListener { _, checkedId ->
 
                     sessionViewModel.onOptionSelect(checkedId)
 
                 })
+
         })
 
 
 
 
 
-        sessionViewModel.getTestState.observe(viewLifecycleOwner ,Observer{
+
+
+        sessionViewModel.isTestFinished.observe(viewLifecycleOwner ,Observer{
             if(it){
 
                 Navigation.findNavController(binding.root).navigate(R.id.resultsFragment)

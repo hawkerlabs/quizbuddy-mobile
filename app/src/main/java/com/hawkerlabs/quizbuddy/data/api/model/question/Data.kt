@@ -3,7 +3,7 @@ package com.hawkerlabs.quizbuddy.data.api.model.question
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class Question(
+data class Data(
     @JsonProperty("category")
     val category: String = "",
     @JsonProperty("createdAt")

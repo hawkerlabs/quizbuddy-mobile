@@ -1,10 +1,9 @@
 package com.hawkerlabs.quizbuddy.data.model
 
-
 /**
- * TODO delete
+ *
  */
-data class Option(
+data class CurrentOption(
     val id: Int,
     val text: String? = "",
     val isChecked : Boolean? = false,

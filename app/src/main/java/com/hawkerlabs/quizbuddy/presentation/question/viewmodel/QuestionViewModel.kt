@@ -1,13 +1,8 @@
 package com.hawkerlabs.quizbuddy.presentation.question.viewmodel
 
-import android.annotation.SuppressLint
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hawkerlabs.quizbuddy.application.core.dagger.module.SCHEDULER_IO
 import com.hawkerlabs.quizbuddy.application.core.dagger.module.SCHEDULER_MAIN_THREAD
-import com.hawkerlabs.quizbuddy.data.model.Option
-import com.hawkerlabs.quizbuddy.data.model.Question
 import com.hawkerlabs.quizbuddy.domain.session.SessionUseCase
 import io.reactivex.Scheduler
 import javax.inject.Inject
