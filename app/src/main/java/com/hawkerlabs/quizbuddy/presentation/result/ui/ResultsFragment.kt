@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -21,7 +22,7 @@ import kotlinx.android.synthetic.main.question_fragment.view.*
 import kotlinx.android.synthetic.main.result_fragment.*
 import javax.inject.Inject
 
-class ResultsFragment : DaggerFragment(){
+class ResultsFragment : DaggerFragment() {
     private lateinit var binding: ResultFragmentBinding
     private lateinit var sessionViewModel: SessionViewModel
     private lateinit var resultsViewModel: ResultsViewModel
@@ -52,7 +53,18 @@ class ResultsFragment : DaggerFragment(){
         subscribeUi()
 
 
+    }
 
+    /**
+     * On back pressed goto the categories fragment
+     */
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Navigation.findNavController(binding.root).navigate(R.id.categoryFragment)
+            }
+        })
     }
 
 
@@ -64,11 +76,12 @@ class ResultsFragment : DaggerFragment(){
         sessionViewModel.getResult.observe(viewLifecycleOwner, Observer { it ->
             var results = mutableListOf<ResultsListItemViewModel>()
             it.inCorrectAnswers.map { question ->
-                var option  = question.options.filter { option->
+                var option = question.options.filter { option ->
                     option.isCorrectAnswer == true
                 }
                 option[0].text?.let { value ->
-                    ResultsListItemViewModel(question.questionText,
+                    ResultsListItemViewModel(
+                        question.questionText,
                         value
                     )
                 }?.let { it2 -> results.add(it2) }
@@ -84,27 +97,30 @@ class ResultsFragment : DaggerFragment(){
         /**
          *
          */
-        resultsViewModel.getScore.observe(viewLifecycleOwner, Observer {score->
+        resultsViewModel.getScore.observe(viewLifecycleOwner, Observer { score ->
 
             binding.score.text = score.scorePercentage
         })
 
     }
+
     private fun initViewModels() {
 
         activity?.let {
-            sessionViewModel = ViewModelProvider(it, viewModelFactory).get(SessionViewModel::class.java)
-            resultsViewModel = ViewModelProvider(it, viewModelFactory).get(ResultsViewModel::class.java)
+            sessionViewModel =
+                ViewModelProvider(it, viewModelFactory).get(SessionViewModel::class.java)
+            resultsViewModel =
+                ViewModelProvider(it, viewModelFactory).get(ResultsViewModel::class.java)
 
         }
 
 
     }
 
-    private fun initUi(){
+    private fun initUi() {
         list.adapter = resultsAdapter
 
-        binding.finish.setOnClickListener{
+        binding.finish.setOnClickListener {
             sessionViewModel.onFinishTest()
             Navigation.findNavController(binding.root).navigate(R.id.categoryFragment)
         }

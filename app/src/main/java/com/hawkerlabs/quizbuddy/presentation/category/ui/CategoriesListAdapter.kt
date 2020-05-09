@@ -13,7 +13,7 @@ import com.hawkerlabs.quizbuddy.databinding.CategoriesListItemBinding
 import com.hawkerlabs.quizbuddy.presentation.category.viewmodel.CategoriesListItemViewModel
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
-class CategoriesListAdapter :  RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
+class CategoriesListAdapter : RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
 
     private var categories: List<CategoriesListItemViewModel> = emptyList()
 
@@ -69,7 +69,7 @@ class CategoriesListAdapter :  RecyclerView.Adapter<CategoriesListAdapter.ViewHo
                     .centerCrop()
                     .into(binding.categoryImage)
 
-                binding.categoryImage.setOnClickListener{
+                binding.categoryImage.setOnClickListener {
                     var bundle = bundleOf("categoryId" to categoriesListItemViewModel.id)
                     it.findNavController()
                         .navigate(R.id.action_categoryFragment_to_questionFragment, bundle)
