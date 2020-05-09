@@ -23,7 +23,7 @@ import javax.inject.Inject
 /**
  * https://android--code.blogspot.com/2018/02/android-kotlin-radiogroup-and.html
  */
-class QuestionFragment : DaggerFragment(){
+class QuestionFragment : DaggerFragment() {
 
 //    private lateinit var optionsAdapter: OptionsAdapter
 
@@ -33,7 +33,7 @@ class QuestionFragment : DaggerFragment(){
     private lateinit var sessionViewModel: SessionViewModel
 
 
-    private lateinit var categoryId : String
+    private lateinit var categoryId: String
 
     private lateinit var binding: QuestionFragmentBinding
     override fun onCreateView(
@@ -60,7 +60,7 @@ class QuestionFragment : DaggerFragment(){
     private fun initUi() {
 
 
-        submitAnswer.setOnClickListener{
+        submitAnswer.setOnClickListener {
             sessionViewModel.onSubmit()
             sessionViewModel.onNext()
         }
@@ -70,15 +70,18 @@ class QuestionFragment : DaggerFragment(){
     /**
      *
      */
-    private fun  subscribeUi(){
+    private fun subscribeUi() {
 
         sessionViewModel.getCurrentQuestion.observe(viewLifecycleOwner, Observer {
+
+            binding.progressBarHolder.visibility = View.GONE
+            binding.questionLayout.visibility = View.VISIBLE
 
             binding.questionText.text = it.questionText
             binding.optionsGroup.removeAllViews()
 
 
-            it.options.map {option ->
+            it.options.map { option ->
                 val rbn = RadioButton(activity)
                 rbn.id = option.id
                 rbn.text = option.text
@@ -102,8 +105,8 @@ class QuestionFragment : DaggerFragment(){
 
 
 
-        sessionViewModel.isTestFinished.observe(viewLifecycleOwner ,Observer{
-            if(it){
+        sessionViewModel.isTestFinished.observe(viewLifecycleOwner, Observer {
+            if (it) {
 
                 Navigation.findNavController(binding.root).navigate(R.id.resultsFragment)
             }
@@ -116,8 +119,8 @@ class QuestionFragment : DaggerFragment(){
     private fun initViewModels() {
 
         activity?.let {
-            sessionViewModel = ViewModelProvider(it, viewModelFactory).get(SessionViewModel::class.java)
-
+            sessionViewModel =
+                ViewModelProvider(it, viewModelFactory).get(SessionViewModel::class.java)
 
 
         }

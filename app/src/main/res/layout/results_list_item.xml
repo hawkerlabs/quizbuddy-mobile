@@ -38,6 +38,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/design_default_color_primary"
                 android:text="@{viewModel.answer}" />
         </LinearLayout>
 

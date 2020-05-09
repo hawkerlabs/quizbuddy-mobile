@@ -67,12 +67,26 @@ class ResultsFragment : DaggerFragment(){
                 var option  = question.options.filter { option->
                     option.isCorrectAnswer == true
                 }
-                results.add(ResultsListItemViewModel(question.questionText, option[0].text))
+                option[0].text?.let { value ->
+                    ResultsListItemViewModel(question.questionText,
+                        value
+                    )
+                }?.let { it2 -> results.add(it2) }
 
             }
             resultsAdapter.onResults(results)
+            resultsViewModel.onResults(it)
 
 
+        })
+
+
+        /**
+         *
+         */
+        resultsViewModel.getScore.observe(viewLifecycleOwner, Observer {score->
+
+            binding.score.text = score.scorePercentage
         })
 
     }
@@ -80,7 +94,7 @@ class ResultsFragment : DaggerFragment(){
 
         activity?.let {
             sessionViewModel = ViewModelProvider(it, viewModelFactory).get(SessionViewModel::class.java)
-
+            resultsViewModel = ViewModelProvider(it, viewModelFactory).get(ResultsViewModel::class.java)
 
         }
 
@@ -90,9 +104,9 @@ class ResultsFragment : DaggerFragment(){
     private fun initUi(){
         list.adapter = resultsAdapter
 
-//        finish.setOnClickListener{
-//            sessionViewModel.onFinishTest()
-//            Navigation.findNavController(binding.root).navigate(R.id.categoryFragment)
-//        }
+        binding.finish.setOnClickListener{
+            sessionViewModel.onFinishTest()
+            Navigation.findNavController(binding.root).navigate(R.id.categoryFragment)
+        }
     }
 }

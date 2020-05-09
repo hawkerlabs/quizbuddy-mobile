@@ -7,11 +7,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
-import com.bumptech.glide.Glide
+
 import com.hawkerlabs.quizbuddy.R
 import com.hawkerlabs.quizbuddy.application.core.ViewModelFactory
-import com.hawkerlabs.quizbuddy.application.utils.Images
 import com.hawkerlabs.quizbuddy.databinding.CategoryFragmentBinding
 import com.hawkerlabs.quizbuddy.presentation.category.viewmodel.CategoryViewModel
 import com.hawkerlabs.quizbuddy.presentation.session.SessionViewModel
@@ -61,27 +59,33 @@ class CategoryFragment : DaggerFragment() {
      * Fire up the adapter after get categories service call
      */
     private fun subscribeUi() {
-        categoryViewModel.getDisplayCategories.observe(viewLifecycleOwner, Observer { categoriesListItemViewModel ->
-            categoriesListAdapter = CategoriesListAdapter()
-            categoriesListAdapter.onResults(categoriesListItemViewModel)
-            list.adapter = categoriesListAdapter
+        categoryViewModel.getDisplayCategories.observe(
+            viewLifecycleOwner,
+            Observer { categoriesListItemViewModel ->
+                categoriesListAdapter = CategoriesListAdapter()
+                categoriesListAdapter.onResults(categoriesListItemViewModel)
+                list.adapter = categoriesListAdapter
 
-        })
+                binding.progressBarHolder.visibility = View.GONE
+            })
 
     }
+
     /**
      *
      */
-    private fun initUi(){
+    private fun initUi() {
 
     }
 
     private fun initViewModels() {
 
         activity?.let {
-            sessionViewModel = ViewModelProvider(it, viewModelFactory).get(SessionViewModel::class.java)
-            categoryViewModel = ViewModelProvider(it, viewModelFactory).get(CategoryViewModel::class.java)
-     }
+            sessionViewModel =
+                ViewModelProvider(it, viewModelFactory).get(SessionViewModel::class.java)
+            categoryViewModel =
+                ViewModelProvider(it, viewModelFactory).get(CategoryViewModel::class.java)
+        }
 
 
     }
