@@ -14,7 +14,6 @@ import androidx.navigation.Navigation
 import com.hawkerlabs.quizbuddy.R
 import com.hawkerlabs.quizbuddy.application.core.ViewModelFactory
 import com.hawkerlabs.quizbuddy.databinding.QuestionFragmentBinding
-import com.hawkerlabs.quizbuddy.presentation.question.viewmodel.QuestionViewModel
 import com.hawkerlabs.quizbuddy.presentation.session.SessionViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.question_fragment.*
@@ -24,7 +23,7 @@ import javax.inject.Inject
 /**
  * https://android--code.blogspot.com/2018/02/android-kotlin-radiogroup-and.html
  */
-class QuestionFragment : DaggerFragment(){
+class QuestionFragment : DaggerFragment() {
 
 //    private lateinit var optionsAdapter: OptionsAdapter
 
@@ -32,6 +31,9 @@ class QuestionFragment : DaggerFragment(){
     lateinit var viewModelFactory: ViewModelFactory
 
     private lateinit var sessionViewModel: SessionViewModel
+
+
+    private lateinit var categoryId: String
 
     private lateinit var binding: QuestionFragmentBinding
     override fun onCreateView(
@@ -42,7 +44,7 @@ class QuestionFragment : DaggerFragment(){
         binding = DataBindingUtil.inflate(inflater, R.layout.question_fragment, container, false)
 
 
-
+        categoryId = arguments?.getString("categoryId") ?: ""
         return binding.root
     }
 
@@ -58,7 +60,7 @@ class QuestionFragment : DaggerFragment(){
     private fun initUi() {
 
 
-        submitAnswer.setOnClickListener{
+        submitAnswer.setOnClickListener {
             sessionViewModel.onSubmit()
             sessionViewModel.onNext()
         }
@@ -68,15 +70,18 @@ class QuestionFragment : DaggerFragment(){
     /**
      *
      */
-    private fun  subscribeUi(){
+    private fun subscribeUi() {
 
-        sessionViewModel.getSession.observe(viewLifecycleOwner, Observer {
-            val question  = it.currentQuestion
-            binding.questionText.text = question.questionText
+        sessionViewModel.getCurrentQuestion.observe(viewLifecycleOwner, Observer {
+
+            binding.progressBarHolder.visibility = View.GONE
+            binding.questionLayout.visibility = View.VISIBLE
+
+            binding.questionText.text = it.questionText
             binding.optionsGroup.removeAllViews()
 
 
-            it.currentQuestion.options.map {option->
+            it.options.map { option ->
                 val rbn = RadioButton(activity)
                 rbn.id = option.id
                 rbn.text = option.text
@@ -85,21 +90,23 @@ class QuestionFragment : DaggerFragment(){
 
                 binding.optionsGroup.addView(rbn)
             }
-
             binding.optionsGroup.setOnCheckedChangeListener(
                 RadioGroup.OnCheckedChangeListener { _, checkedId ->
 
                     sessionViewModel.onOptionSelect(checkedId)
 
                 })
+
         })
 
 
 
 
 
-        sessionViewModel.getTestState.observe(viewLifecycleOwner ,Observer{
-            if(it){
+
+
+        sessionViewModel.isTestFinished.observe(viewLifecycleOwner, Observer {
+            if (it) {
 
                 Navigation.findNavController(binding.root).navigate(R.id.resultsFragment)
             }
@@ -112,12 +119,12 @@ class QuestionFragment : DaggerFragment(){
     private fun initViewModels() {
 
         activity?.let {
-            sessionViewModel = ViewModelProvider(it, viewModelFactory).get(SessionViewModel::class.java)
-
+            sessionViewModel =
+                ViewModelProvider(it, viewModelFactory).get(SessionViewModel::class.java)
 
 
         }
-        sessionViewModel.onNewSession()
+        sessionViewModel.onNewSession(categoryId)
 
 
     }

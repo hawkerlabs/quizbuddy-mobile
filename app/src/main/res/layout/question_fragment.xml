@@ -3,26 +3,55 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="14dp"
+        tools:context=".MainActivity">
+
+        <RelativeLayout
+            android:id="@+id/progressBarHolder"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="14dp"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="100dp"
-            tools:context=".MainActivity">
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            android:gravity="center"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ProgressBar
+                android:id="@+id/progressBar1"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+
+                />
+        </RelativeLayout>
+
+        <ScrollView
+            android:id="@+id/questionLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/world_knowledge_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:layout_marginEnd="4dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -41,8 +70,8 @@
                         android:id="@+id/questionText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/question_font_size"
                         android:layout_margin="@dimen/question_text_margin"
+                        android:textSize="@dimen/question_font_size"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -53,9 +82,9 @@
                         android:id="@+id/optionsList"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginTop="@dimen/space_8"
                         android:orientation="horizontal"
-                        android:layout_gravity="center"
                         android:padding="42dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -67,9 +96,9 @@
                             android:id="@+id/optionsGroup"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity=""
                             android:layout_marginStart="18dp"
                             android:layout_marginTop="8dp"
-                            android:layout_gravity=""
                             android:layout_marginEnd="8dp"
                             android:padding="40dp"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -88,8 +117,8 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:layout_weight="1"
+                        android:text="@string/submit"
                         app:backgroundTint="@color/colorPrimary"
-                        android:text="Submit"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -100,10 +129,8 @@
 
             </androidx.cardview.widget.CardView>
 
+        </ScrollView>
 
 
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
