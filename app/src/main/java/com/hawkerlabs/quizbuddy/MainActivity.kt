@@ -1,10 +1,7 @@
 package com.hawkerlabs.quizbuddy
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
 import com.hawkerlabs.quizbuddy.application.core.ViewModelFactory
-import com.hawkerlabs.quizbuddy.data.QuestionsManager
 import com.hawkerlabs.quizbuddy.presentation.session.SessionViewModel
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
@@ -43,7 +40,6 @@ class MainActivity : DaggerAppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        QuestionsManager.initialize()
 
     }
 }

@@ -2,4 +2,15 @@
     <string name="app_name">Quiz Buddy</string>
 
     <string name="world_knowledge">World Knowledge</string>
+
+
+    <!-- Question   -->
+    <string name="submit">Submit</string>
+
+    <!-- Results-->
+    <string name="your_score">Your Score</string>
+    <string name="congratulations">Congratulations!</string>
+    <string name="finish_test">Finish Test</string>
+    <string name="score_placeholder">80%</string>
+    <string name="better_luck">Better luck next time for these</string>
 </resources>

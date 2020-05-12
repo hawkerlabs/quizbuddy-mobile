@@ -1,20 +1,25 @@
 package com.hawkerlabs.quizbuddy.domain.session
 
+import com.hawkerlabs.quizbuddy.data.api.model.question.Data
 import com.hawkerlabs.quizbuddy.data.model.Question
 import com.hawkerlabs.quizbuddy.data.model.Session
+import com.hawkerlabs.quizbuddy.data.model.Result
+
 import io.reactivex.Single
 
 interface SessionUseCase {
 
-//     fun getAllQuestions(): Single<List<Question>>
 
-    fun initSession()
+    fun initSession(questions: List<Data>)
 
-     fun getNextQuestion(): Single<Question>
+    fun initSessionByCategory(categoryId : String)
 
-     fun onAnswerSubmit(selectedId : Int )
+     fun getNextQuestion(): Single<Data>
+
+     fun onAnswerSubmit(selectedId : Int, currentQuestion : Question)
 
 
-    fun getSessionState(): Single<Session>
+
+    fun getTestResults() : Single<Result>
 
 }
