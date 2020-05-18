@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.bumptech.glide.Glide
 import com.hawkerlabs.quizbuddy.R
 import com.hawkerlabs.quizbuddy.application.core.ViewModelFactory
+import com.hawkerlabs.quizbuddy.application.utils.Images
 import com.hawkerlabs.quizbuddy.databinding.CategoryFragmentBinding
 import com.hawkerlabs.quizbuddy.presentation.category.viewmodel.CategoryViewModel
 import com.hawkerlabs.quizbuddy.presentation.session.SessionViewModel
@@ -49,8 +51,8 @@ class CategoryFragment : DaggerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        initViewModels()
         initUi()
+        initViewModels()
         subscribeUi()
     }
 
@@ -62,12 +64,21 @@ class CategoryFragment : DaggerFragment() {
         categoryViewModel.getDisplayCategories.observe(
             viewLifecycleOwner,
             Observer { categoriesListItemViewModel ->
+                refreshLayout.isRefreshing = false
                 categoriesListAdapter = CategoriesListAdapter()
                 categoriesListAdapter.onResults(categoriesListItemViewModel)
                 list.adapter = categoriesListAdapter
 
-                binding.progressBarHolder.visibility = View.GONE
             })
+
+
+
+        //On refresh call the viewmodels refresh method which will initiate the service call allover again
+        refreshLayout.setOnRefreshListener {
+            refreshLayout.isRefreshing = true
+            categoryViewModel.onRefresh()
+        }
+
 
     }
 
@@ -76,6 +87,13 @@ class CategoryFragment : DaggerFragment() {
      */
     private fun initUi() {
 
+        refreshLayout.isRefreshing = true
+        binding.collapsingToolbar.title = "Quiz Buddy"
+        Glide.with(binding.root.context)
+            .asBitmap()
+            .load(Images.DISPLAY)
+            .centerCrop()
+            .into(binding.image)
     }
 
     private fun initViewModels() {
