@@ -6,17 +6,14 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="14dp"
-
+        android:layout_height="match_parent"
+        android:background="@color/blue"
         tools:context=".MainActivity">
 
         <RelativeLayout
             android:id="@+id/progressBarHolder"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
             android:gravity="center"
             android:visibility="visible"
@@ -37,9 +34,10 @@
 
         <ScrollView
             android:id="@+id/questionLayout"
-            android:layout_width="377dp"
-            android:layout_height="372dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:visibility="invisible"
+            android:padding="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -49,6 +47,7 @@
                 android:id="@+id/world_knowledge_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="4dp"
@@ -60,12 +59,28 @@
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="377dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    android:background="@color/yellow"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/questionNo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/question_text_margin"
+                        android:text="1/10"
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/question_status_size"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.951"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.048" />
 
                     <TextView
                         android:id="@+id/questionText"
@@ -73,6 +88,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/question_text_margin"
                         android:textSize="@dimen/question_font_size"
+                        android:textColor="@color/blue"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -114,11 +130,11 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/submitAnswer"
                         style="@style/Widget.MaterialComponents.Button"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
                         android:layout_weight="1"
                         android:text="@string/submit"
+                        android:layout_marginBottom="20dp"
                         app:backgroundTint="@color/colorPrimary"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
