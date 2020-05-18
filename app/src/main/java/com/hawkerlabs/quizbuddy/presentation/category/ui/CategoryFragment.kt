@@ -91,8 +91,7 @@ class CategoryFragment : DaggerFragment() {
         binding.collapsingToolbar.title = "Quiz Buddy"
         Glide.with(binding.root.context)
             .asBitmap()
-            .load(Images.DISPLAY)
-            .centerCrop()
+            .load(Images.DISPLAY).fitCenter()
             .into(binding.image)
     }
 
