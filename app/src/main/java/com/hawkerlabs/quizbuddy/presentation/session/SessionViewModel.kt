@@ -112,10 +112,10 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
     }
 
 
-
+    /**
+     * Set the question value
+     */
     private fun onResponse(questions: List<Data>) {
-
-
         sessionUseCase.initSession(questions)
         getNextQuestion()
 
@@ -127,14 +127,22 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
 
     }
 
+
+    /**
+     * On new test session clean the existing question live data, we do this so that user does not see stale data from a previous test session,
+     * after we get the questions from the service call we set the value of the questions set again in onResponse
+     */
     @SuppressLint("CheckResult")
     fun onNewSession(categoryId : String){
+
         _finishTest.value = false
+        _currentQuestion.value = null
         getQuestionsByCategoryUseCase.invoke(categoryId).subscribeOn(subscribeOnScheduler)
             .observeOn(observeOnScheduler)
             .subscribe(this::onResponse, this::onError)
 
     }
+
 
 
 

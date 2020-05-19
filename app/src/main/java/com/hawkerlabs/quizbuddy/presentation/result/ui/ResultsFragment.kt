@@ -122,7 +122,13 @@ class ResultsFragment : DaggerFragment() {
 
         binding.finish.setOnClickListener {
             sessionViewModel.onFinishTest()
-            Navigation.findNavController(binding.root).navigate(R.id.categoryFragment)
+//            Navigation.findNavController(binding.root).navigate(R.id.categoryFragment)
+
+
+            Navigation.findNavController(binding.root).navigate(ResultsFragmentDirections.actionResultsFragmentToCategoryFragment())
+
+
+
         }
     }
 }

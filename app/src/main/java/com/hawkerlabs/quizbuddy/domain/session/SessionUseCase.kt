@@ -12,7 +12,7 @@ interface SessionUseCase {
 
     fun initSession(questions: List<Data>)
 
-    fun initSessionByCategory(categoryId : String)
+//    fun initSessionByCategory(categoryId : String)
 
      fun getNextQuestion(): Single<Data>
 

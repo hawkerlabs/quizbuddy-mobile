@@ -9,6 +9,7 @@
         android:label="CategoryFragment" >
         <action
             android:id="@+id/action_categoryFragment_to_questionFragment"
+
             app:destination="@id/questionFragment" />
     </fragment>
     <fragment
@@ -22,5 +23,17 @@
     <fragment
         android:id="@+id/resultsFragment"
         android:name="com.hawkerlabs.quizbuddy.presentation.result.ui.ResultsFragment"
-        android:label="ResultsFragment" />
+        android:label="ResultsFragment">
+
+        <action
+            android:id="@+id/action_resultsFragment_to_categoryFragment"
+            app:destination="@id/categoryFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/app_nav"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+
+
+
 </navigation>

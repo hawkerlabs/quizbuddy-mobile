@@ -25,7 +25,6 @@ import javax.inject.Inject
  */
 class QuestionFragment : DaggerFragment() {
 
-//    private lateinit var optionsAdapter: OptionsAdapter
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -49,6 +48,9 @@ class QuestionFragment : DaggerFragment() {
     }
 
 
+    override fun onResume() {
+        super.onResume()
+    }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initViewModels()
@@ -58,7 +60,8 @@ class QuestionFragment : DaggerFragment() {
     }
 
     private fun initUi() {
-
+        binding.progressBarHolder.visibility = View.VISIBLE
+        binding.questionLayout.visibility = View.GONE
 
         submitAnswer.setOnClickListener {
             sessionViewModel.onSubmit()
@@ -74,28 +77,31 @@ class QuestionFragment : DaggerFragment() {
 
         sessionViewModel.getCurrentQuestion.observe(viewLifecycleOwner, Observer {
 
-            binding.progressBarHolder.visibility = View.GONE
-            binding.questionLayout.visibility = View.VISIBLE
+            if(it != null){
+                binding.progressBarHolder.visibility = View.GONE
+                binding.questionLayout.visibility = View.VISIBLE
 
-            binding.questionText.text = it.questionText
-            binding.optionsGroup.removeAllViews()
-
-
-            it.options.map { option ->
-                val rbn = RadioButton(activity)
-                rbn.id = option.id
-                rbn.text = option.text
-                rbn.typeface = Typeface.create("roboto_medium", Typeface.NORMAL)
+                binding.questionText.text = it.questionText
+                binding.optionsGroup.removeAllViews()
 
 
-                binding.optionsGroup.addView(rbn)
+                it.options.map { option ->
+                    val rbn = RadioButton(activity)
+                    rbn.id = option.id
+                    rbn.text = option.text
+                    rbn.typeface = Typeface.create("roboto_medium", Typeface.NORMAL)
+
+
+                    binding.optionsGroup.addView(rbn)
+                }
+                binding.optionsGroup.setOnCheckedChangeListener(
+                    RadioGroup.OnCheckedChangeListener { _, checkedId ->
+
+                        sessionViewModel.onOptionSelect(checkedId)
+
+                    })
             }
-            binding.optionsGroup.setOnCheckedChangeListener(
-                RadioGroup.OnCheckedChangeListener { _, checkedId ->
 
-                    sessionViewModel.onOptionSelect(checkedId)
-
-                })
 
         })
 

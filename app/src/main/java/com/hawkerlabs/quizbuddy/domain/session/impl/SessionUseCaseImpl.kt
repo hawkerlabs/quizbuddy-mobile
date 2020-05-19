@@ -81,21 +81,21 @@ class SessionUseCaseImpl @Inject constructor(
         result = Result( mutableSetOf<Question>(), mutableSetOf<Question>(), 0, false )
     }
 
-    @SuppressLint("CheckResult")
-    override fun initSessionByCategory(categoryId: String) {
-        getQuestionsByCategoryUseCase.invoke(categoryId).subscribeOn(subscribeOnScheduler)
-            .observeOn(observeOnScheduler)
-            .subscribe(this::onResponse, this::onError)
-    }
-
-
-    private fun onResponse(categories: List<Data>) {
-//        categories.map { item ->
-//            _categoriesList.add(CategoriesListItemViewModel(item))
-//        }
+//    @SuppressLint("CheckResult")
+//    override fun initSessionByCategory(categoryId: String) {
+//        getQuestionsByCategoryUseCase.invoke(categoryId).subscribeOn(subscribeOnScheduler)
+//            .observeOn(observeOnScheduler)
+//            .subscribe(this::onResponse, this::onError)
+//    }
 //
-//        _categoriesListItemViewModel.value = _categoriesList
-    }
+//
+//    private fun onResponse(categories: List<Data>) {
+////        categories.map { item ->
+////            _categoriesList.add(CategoriesListItemViewModel(item))
+////        }
+////
+////        _categoriesListItemViewModel.value = _categoriesList
+//    }
 
 
 
