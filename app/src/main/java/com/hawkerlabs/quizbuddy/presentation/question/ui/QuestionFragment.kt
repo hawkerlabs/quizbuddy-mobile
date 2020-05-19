@@ -63,9 +63,15 @@ class QuestionFragment : DaggerFragment() {
         binding.progressBarHolder.visibility = View.VISIBLE
         binding.questionLayout.visibility = View.GONE
 
-        submitAnswer.setOnClickListener {
+        next.setOnClickListener {
             sessionViewModel.onSubmit()
             sessionViewModel.onNext()
+        }
+
+
+        previous.setOnClickListener {
+            sessionViewModel.onPrevious()
+
         }
     }
 

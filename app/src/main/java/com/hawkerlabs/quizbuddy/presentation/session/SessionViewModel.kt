@@ -144,6 +144,10 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
     }
 
 
+    fun onPrevious(){
+
+        _currentQuestion.value?.let { sessionUseCase.onAnswerSubmit (selectedId, it) }
+    }
 
 
 

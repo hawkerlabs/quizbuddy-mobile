@@ -5,7 +5,8 @@
 
 
     <!-- Question   -->
-    <string name="submit">Submit</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
 
     <!-- Results-->
     <string name="your_score">Your Score</string>
