@@ -7,12 +7,9 @@ import androidx.lifecycle.ViewModel
 import com.hawkerlabs.quizbuddy.application.core.dagger.module.SCHEDULER_IO
 import com.hawkerlabs.quizbuddy.application.core.dagger.module.SCHEDULER_MAIN_THREAD
 import com.hawkerlabs.quizbuddy.data.api.model.question.Data
-import com.hawkerlabs.quizbuddy.data.model.CurrentOption
-import com.hawkerlabs.quizbuddy.data.model.Question
-import com.hawkerlabs.quizbuddy.data.model.Result
+import com.hawkerlabs.quizbuddy.data.model.*
 
 
-import com.hawkerlabs.quizbuddy.data.model.Session
 import com.hawkerlabs.quizbuddy.domain.question.GetQuestionsByCategoryUseCase
 import com.hawkerlabs.quizbuddy.domain.session.SessionUseCase
 import io.reactivex.Scheduler
@@ -30,6 +27,13 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
     private var _result = MutableLiveData<Result>()
 
     private var selectedId = -1
+
+
+
+    private var _currentIndex = MutableLiveData<String>()
+    val currentIndex: LiveData<String> = _currentIndex
+
+
 
 
     private var _finishTest = MutableLiveData<Boolean>()
@@ -63,11 +67,16 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
 
 
     fun onNext(){
+
         getNextQuestion()
     }
 
 
-    private fun onQuestionResponse(question : Data){
+    private fun onQuestionResponse( currentQuestion : CurrentQuestion){
+
+
+        val question  = currentQuestion.question
+        val currentIndex = currentQuestion.index
 
         var currentOptions = mutableSetOf<CurrentOption>()
         var count = 1
@@ -85,10 +94,12 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
 
         if(question.options.isEmpty()){
             _finishTest.value = true
+            onFinishTest()
             getTestResults()
 
         } else {
             _currentQuestion.value = currentQuestion
+            _currentIndex.value = currentIndex
         }
 
 
@@ -123,8 +134,11 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
     }
 
 
+    /**
+     *
+     */
     fun onFinishTest(){
-
+        sessionUseCase.finishTest()
     }
 
 
@@ -137,6 +151,7 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
 
         _finishTest.value = false
         _currentQuestion.value = null
+
         getQuestionsByCategoryUseCase.invoke(categoryId).subscribeOn(subscribeOnScheduler)
             .observeOn(observeOnScheduler)
             .subscribe(this::onResponse, this::onError)
@@ -144,9 +159,14 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
     }
 
 
+    @SuppressLint("CheckResult")
     fun onPrevious(){
 
-        _currentQuestion.value?.let { sessionUseCase.onAnswerSubmit (selectedId, it) }
+
+        sessionUseCase.getPreviousQuestion().subscribeOn(subscribeOnScheduler)
+            .observeOn(observeOnScheduler)
+            .subscribe(this::onQuestionResponse, this::onError)
+
     }
 
 

@@ -114,7 +114,9 @@ class QuestionFragment : DaggerFragment() {
 
 
 
-
+        sessionViewModel.currentIndex.observe(viewLifecycleOwner, Observer{
+            binding.questionNo.text = it
+        })
 
 
         sessionViewModel.isTestFinished.observe(viewLifecycleOwner, Observer {

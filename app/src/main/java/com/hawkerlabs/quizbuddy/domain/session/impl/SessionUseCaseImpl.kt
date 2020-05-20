@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import com.hawkerlabs.quizbuddy.application.core.dagger.module.SCHEDULER_IO
 import com.hawkerlabs.quizbuddy.application.core.dagger.module.SCHEDULER_MAIN_THREAD
 import com.hawkerlabs.quizbuddy.data.api.model.question.Data
+import com.hawkerlabs.quizbuddy.data.model.CurrentQuestion
 import com.hawkerlabs.quizbuddy.data.model.Question
 import com.hawkerlabs.quizbuddy.data.model.Result
 import com.hawkerlabs.quizbuddy.data.model.Session
@@ -20,27 +21,51 @@ class SessionUseCaseImpl @Inject constructor(
     @Named(SCHEDULER_MAIN_THREAD) val observeOnScheduler: Scheduler
 ) : SessionUseCase {
 
-    private var questions = listOf<Data>()
+    private var questions = arrayOf<Data>()
 
-    private lateinit var questionsIterator : Iterator<Data>
+    private lateinit var questionsIterator : ListIterator<Data>
     private var correctAnswerCount: Int = 0
 
     private lateinit var result: Result
 
     var currentQuestion : Data? = null
 
-    /**
-     *
-     */
-    override fun getNextQuestion(): Single<Data> {
 
-        if (questionsIterator.hasNext()) {
-            var question = questionsIterator.next()
-            currentQuestion = question
-            return Single.just(question)
+    private var currentIndex = -1
+
+
+    /**
+     * Emit the the previous question
+     */
+    override fun getPreviousQuestion(): Single<CurrentQuestion> {
+
+        currentIndex--
+        val questionIndex = currentIndex + 1
+        if(currentIndex >=  0 ){
+            return Single.just(CurrentQuestion(questions[currentIndex], (questionIndex).toString().plus("/").plus(questions.size)))
         }
 
-    return Single.just(Data())
+        return Single.just(CurrentQuestion(Data(), ""))
+
+    }
+
+
+
+
+    /**
+     *  Emit the the next question
+     */
+    override fun getNextQuestion(): Single<CurrentQuestion> {
+
+
+
+        currentIndex++
+        val questionIndex = currentIndex + 1
+        if(currentIndex < questions.size ){
+            return Single.just(CurrentQuestion(questions[currentIndex], (questionIndex).toString().plus("/").plus(questions.size)))
+        }
+
+    return Single.just(CurrentQuestion(Data(), ""))
 
     }
 
@@ -59,6 +84,9 @@ class SessionUseCaseImpl @Inject constructor(
         }
     }
 
+    override fun finishTest() {
+        currentIndex = -1
+    }
 
 
     /**
@@ -73,29 +101,17 @@ class SessionUseCaseImpl @Inject constructor(
      * Initialize test session
      */
     override fun initSession(questionSet: List<Data>) {
+        currentIndex = -1
+        questions = questionSet.toTypedArray()
 
-        questions = questionSet
-        questionsIterator = questions.iterator()
+//        questionsIterator = questions.listIterator()
         correctAnswerCount = 0
 
         result = Result( mutableSetOf<Question>(), mutableSetOf<Question>(), 0, false )
+//        getNextQuestion()
     }
 
-//    @SuppressLint("CheckResult")
-//    override fun initSessionByCategory(categoryId: String) {
-//        getQuestionsByCategoryUseCase.invoke(categoryId).subscribeOn(subscribeOnScheduler)
-//            .observeOn(observeOnScheduler)
-//            .subscribe(this::onResponse, this::onError)
-//    }
-//
-//
-//    private fun onResponse(categories: List<Data>) {
-////        categories.map { item ->
-////            _categoriesList.add(CategoriesListItemViewModel(item))
-////        }
-////
-////        _categoriesListItemViewModel.value = _categoriesList
-//    }
+
 
 
 
