@@ -83,9 +83,10 @@
 
                     <TextView
                         android:id="@+id/questionText"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/question_text_margin"
+                        android:gravity="center"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/question_font_size"
                         android:textStyle="bold"

@@ -9,8 +9,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import com.bumptech.glide.Glide
 import com.hawkerlabs.quizbuddy.R
 import com.hawkerlabs.quizbuddy.application.core.ViewModelFactory
+import com.hawkerlabs.quizbuddy.application.utils.Images
 import com.hawkerlabs.quizbuddy.data.model.CurrentOption
 import com.hawkerlabs.quizbuddy.data.model.Question
 import com.hawkerlabs.quizbuddy.databinding.ResultFragmentBinding
@@ -119,6 +121,12 @@ class ResultsFragment : DaggerFragment() {
 
     private fun initUi() {
         list.adapter = resultsAdapter
+
+        binding.collapsingToolbar.title = "Test Results"
+        Glide.with(binding.root.context)
+            .asBitmap()
+            .load(Images.FINISH).fitCenter()
+            .into(binding.image)
 
         binding.finish.setOnClickListener {
             sessionViewModel.onFinishTest()
