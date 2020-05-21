@@ -1,9 +1,13 @@
 package com.hawkerlabs.quizbuddy.presentation.category.ui
 
+import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -11,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions.bitmapTransform
 import com.hawkerlabs.quizbuddy.R
 import com.hawkerlabs.quizbuddy.databinding.CategoriesListItemBinding
 import com.hawkerlabs.quizbuddy.presentation.category.viewmodel.CategoriesListItemViewModel
+import com.hawkerlabs.quizbuddy.presentation.result.ui.ResultsFragmentDirections
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
 class CategoriesListAdapter : RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
@@ -29,6 +34,11 @@ class CategoriesListAdapter : RecyclerView.Adapter<CategoriesListAdapter.ViewHol
             binding
         )
     }
+
+
+
+
+
 
     /**
      *
@@ -72,7 +82,7 @@ class CategoriesListAdapter : RecyclerView.Adapter<CategoriesListAdapter.ViewHol
                 binding.categoryImage.setOnClickListener {
                     var bundle = bundleOf("categoryId" to categoriesListItemViewModel.id)
                     it.findNavController()
-                        .navigate(R.id.action_categoryFragment_to_questionFragment, bundle)
+                        .navigate(R.id.questionFragment, bundle)
                 }
                 viewModel = categoriesListItemViewModel
 

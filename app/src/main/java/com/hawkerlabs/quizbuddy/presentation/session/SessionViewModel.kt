@@ -22,6 +22,18 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
                                            @Named(SCHEDULER_MAIN_THREAD) val observeOnScheduler: Scheduler
 ): ViewModel(){
 
+    /**
+     * Enum class to track button states
+     */
+    enum class SessionState {
+        FIRST_QUESTION,
+        ACTIVE_STATE,
+        LAST_QUESTION
+    }
+    private val _sessionState =
+        MutableLiveData<SessionState>(SessionState.FIRST_QUESTION)
+    val sessionState: LiveData<SessionState> = _sessionState
+
     private var _currentQuestion = MutableLiveData<Question>()
     private var _session = MutableLiveData<Session>()
     private var _result = MutableLiveData<Result>()
@@ -67,7 +79,6 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
 
 
     fun onNext(){
-
         getNextQuestion()
     }
 
@@ -77,6 +88,12 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
 
         val question  = currentQuestion.question
         val currentIndex = currentQuestion.index
+
+        if(currentQuestion.questionIndex == 0){
+            _sessionState.value = SessionState.FIRST_QUESTION
+        } else{
+            _sessionState.value = SessionState.ACTIVE_STATE
+        }
 
         var currentOptions = mutableSetOf<CurrentOption>()
         var count = 1

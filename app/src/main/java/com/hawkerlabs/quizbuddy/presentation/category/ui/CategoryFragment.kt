@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.hawkerlabs.quizbuddy.R
@@ -14,6 +16,7 @@ import com.hawkerlabs.quizbuddy.application.core.ViewModelFactory
 import com.hawkerlabs.quizbuddy.application.utils.Images
 import com.hawkerlabs.quizbuddy.databinding.CategoryFragmentBinding
 import com.hawkerlabs.quizbuddy.presentation.category.viewmodel.CategoryViewModel
+import com.hawkerlabs.quizbuddy.presentation.result.ui.ResultsFragmentDirections
 import com.hawkerlabs.quizbuddy.presentation.session.SessionViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.category_fragment.*
@@ -45,9 +48,6 @@ class CategoryFragment : DaggerFragment() {
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -55,6 +55,18 @@ class CategoryFragment : DaggerFragment() {
         initViewModels()
         subscribeUi()
     }
+
+
+    /**
+     *
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            activity?.finish()
+        }
+    }
+
 
 
     /**

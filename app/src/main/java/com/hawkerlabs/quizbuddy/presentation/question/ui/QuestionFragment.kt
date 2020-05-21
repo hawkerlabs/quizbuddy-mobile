@@ -7,10 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import androidx.activity.addCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import com.google.android.material.snackbar.Snackbar
 import com.hawkerlabs.quizbuddy.R
 import com.hawkerlabs.quizbuddy.application.core.ViewModelFactory
 import com.hawkerlabs.quizbuddy.databinding.QuestionFragmentBinding
@@ -48,9 +51,8 @@ class QuestionFragment : DaggerFragment() {
     }
 
 
-    override fun onResume() {
-        super.onResume()
-    }
+
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initViewModels()
@@ -83,7 +85,7 @@ class QuestionFragment : DaggerFragment() {
 
         sessionViewModel.getCurrentQuestion.observe(viewLifecycleOwner, Observer {
 
-            if(it != null){
+            if (it != null) {
                 binding.progressBarHolder.visibility = View.GONE
                 binding.questionLayout.visibility = View.VISIBLE
 
@@ -112,9 +114,16 @@ class QuestionFragment : DaggerFragment() {
         })
 
 
+        sessionViewModel.sessionState.observe(viewLifecycleOwner, Observer {sessionState ->
+            when (sessionState) {
+                SessionViewModel.SessionState.FIRST_QUESTION -> binding.previous.isEnabled = false
+                SessionViewModel.SessionState.ACTIVE_STATE -> binding.previous.isEnabled = true
+            }
+        })
 
 
-        sessionViewModel.currentIndex.observe(viewLifecycleOwner, Observer{
+
+        sessionViewModel.currentIndex.observe(viewLifecycleOwner, Observer {
             binding.questionNo.text = it
         })
 
@@ -129,6 +138,33 @@ class QuestionFragment : DaggerFragment() {
         )
 
     }
+
+
+    /**
+     * If the user clicks back in an active test session show a dialog
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            showAlertDialog()
+        }
+    }
+
+    /**
+     * Show alert on back pressed
+     */
+    private fun showAlertDialog() {
+        val builder = AlertDialog.Builder(this.requireContext())
+        builder.setTitle(R.string.ALERT_TITLE)
+        builder.setMessage(R.string.ALERT_TEXT)
+        builder.setPositiveButton(R.string.CONTINUE
+        ) { _, _ ->  Navigation.findNavController(binding.root).popBackStack() }
+        builder.setNegativeButton(R.string.CANCEL, null)
+        builder.show()
+    }
+
+
+
 
     private fun initViewModels() {
 

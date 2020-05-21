@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.hawkerlabs.quizbuddy.R
 import com.hawkerlabs.quizbuddy.application.core.ViewModelFactory
@@ -60,14 +63,23 @@ class ResultsFragment : DaggerFragment() {
     /**
      * On back pressed goto the categories fragment
      */
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                Navigation.findNavController(binding.root).navigate(R.id.categoryFragment)
-            }
-        })
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            Navigation.findNavController(binding.root).navigate(ResultsFragmentDirections.actionResultsFragmentToCategoryFragment())
+        }
     }
+
+
+
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+//            override fun handleOnBackPressed() {
+//                Navigation.findNavController(binding.root).navigate(R.id.categoryFragment)
+//            }
+//        })
+//    }
 
 
     /**
@@ -133,7 +145,7 @@ class ResultsFragment : DaggerFragment() {
 //            Navigation.findNavController(binding.root).navigate(R.id.categoryFragment)
 
 
-            Navigation.findNavController(binding.root).navigate(ResultsFragmentDirections.actionResultsFragmentToCategoryFragment())
+            Navigation.findNavController(binding.root).navigate(R.id.categoryFragment)
 
 
 
