@@ -5,12 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.hawkerlabs.quizbuddy.R
 import com.hawkerlabs.quizbuddy.application.core.ViewModelFactory
+import com.hawkerlabs.quizbuddy.application.utils.Images
 import com.hawkerlabs.quizbuddy.data.model.CurrentOption
 import com.hawkerlabs.quizbuddy.data.model.Question
 import com.hawkerlabs.quizbuddy.databinding.ResultFragmentBinding
@@ -58,14 +63,23 @@ class ResultsFragment : DaggerFragment() {
     /**
      * On back pressed goto the categories fragment
      */
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                Navigation.findNavController(binding.root).navigate(R.id.categoryFragment)
-            }
-        })
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            Navigation.findNavController(binding.root).navigate(ResultsFragmentDirections.actionResultsFragmentToCategoryFragment())
+        }
     }
+
+
+
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+//            override fun handleOnBackPressed() {
+//                Navigation.findNavController(binding.root).navigate(R.id.categoryFragment)
+//            }
+//        })
+//    }
 
 
     /**
@@ -120,9 +134,21 @@ class ResultsFragment : DaggerFragment() {
     private fun initUi() {
         list.adapter = resultsAdapter
 
+        binding.collapsingToolbar.title = "Test Results"
+        Glide.with(binding.root.context)
+            .asBitmap()
+            .load(Images.FINISH).fitCenter()
+            .into(binding.image)
+
         binding.finish.setOnClickListener {
             sessionViewModel.onFinishTest()
+//            Navigation.findNavController(binding.root).navigate(R.id.categoryFragment)
+
+
             Navigation.findNavController(binding.root).navigate(R.id.categoryFragment)
+
+
+
         }
     }
 }

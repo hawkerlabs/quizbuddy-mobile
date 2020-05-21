@@ -5,7 +5,16 @@
 
 
     <!-- Question   -->
-    <string name="submit">Submit</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="CONTINUE">CONTINUE</string>
+    <string name="CANCEL">CANCEL</string>
+
+    <string name="ALERT_TITLE">End Session</string>
+    <string name="ALERT_TEXT">You are in an active test session, are you sure you want to quit?</string>
+
+
+
 
     <!-- Results-->
     <string name="your_score">Your Score</string>

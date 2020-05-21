@@ -31,6 +31,11 @@ class CategoryViewModel @Inject constructor(
         getDisplayCategories()
     }
 
+    public fun onRefresh(){
+        _categoriesList.clear()
+        getDisplayCategories()
+    }
+
     @SuppressLint("CheckResult")
     private fun getDisplayCategories() {
         getDisplayCategoriesUseCase.invoke()
