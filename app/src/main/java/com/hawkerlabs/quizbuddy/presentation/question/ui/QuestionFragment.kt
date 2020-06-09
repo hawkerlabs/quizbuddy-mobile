@@ -7,10 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import androidx.activity.addCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import com.google.android.material.snackbar.Snackbar
 import com.hawkerlabs.quizbuddy.R
 import com.hawkerlabs.quizbuddy.application.core.ViewModelFactory
 import com.hawkerlabs.quizbuddy.databinding.QuestionFragmentBinding
@@ -25,7 +28,6 @@ import javax.inject.Inject
  */
 class QuestionFragment : DaggerFragment() {
 
-//    private lateinit var optionsAdapter: OptionsAdapter
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -49,6 +51,8 @@ class QuestionFragment : DaggerFragment() {
     }
 
 
+
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initViewModels()
@@ -58,11 +62,18 @@ class QuestionFragment : DaggerFragment() {
     }
 
     private fun initUi() {
+        binding.progressBarHolder.visibility = View.VISIBLE
+        binding.questionLayout.visibility = View.GONE
 
-
-        submitAnswer.setOnClickListener {
+        next.setOnClickListener {
             sessionViewModel.onSubmit()
             sessionViewModel.onNext()
+        }
+
+
+        previous.setOnClickListener {
+            sessionViewModel.onPrevious()
+
         }
     }
 
@@ -74,35 +85,47 @@ class QuestionFragment : DaggerFragment() {
 
         sessionViewModel.getCurrentQuestion.observe(viewLifecycleOwner, Observer {
 
-            binding.progressBarHolder.visibility = View.GONE
-            binding.questionLayout.visibility = View.VISIBLE
+            if (it != null) {
+                binding.progressBarHolder.visibility = View.GONE
+                binding.questionLayout.visibility = View.VISIBLE
 
-            binding.questionText.text = it.questionText
-            binding.optionsGroup.removeAllViews()
-
-
-            it.options.map { option ->
-                val rbn = RadioButton(activity)
-                rbn.id = option.id
-                rbn.text = option.text
-                rbn.typeface = Typeface.create("roboto_medium", Typeface.NORMAL)
+                binding.questionText.text = it.questionText
+                binding.optionsGroup.removeAllViews()
 
 
-                binding.optionsGroup.addView(rbn)
+                it.options.map { option ->
+                    val rbn = RadioButton(activity)
+                    rbn.id = option.id
+                    rbn.text = option.text
+                    rbn.typeface = Typeface.create("roboto_medium", Typeface.NORMAL)
+
+
+                    binding.optionsGroup.addView(rbn)
+                }
+                binding.optionsGroup.setOnCheckedChangeListener(
+                    RadioGroup.OnCheckedChangeListener { _, checkedId ->
+
+                        sessionViewModel.onOptionSelect(checkedId)
+
+                    })
             }
-            binding.optionsGroup.setOnCheckedChangeListener(
-                RadioGroup.OnCheckedChangeListener { _, checkedId ->
 
-                    sessionViewModel.onOptionSelect(checkedId)
-
-                })
 
         })
 
 
+        sessionViewModel.sessionState.observe(viewLifecycleOwner, Observer {sessionState ->
+            when (sessionState) {
+                SessionViewModel.SessionState.FIRST_QUESTION -> binding.previous.isEnabled = false
+                SessionViewModel.SessionState.ACTIVE_STATE -> binding.previous.isEnabled = true
+            }
+        })
 
 
 
+        sessionViewModel.currentIndex.observe(viewLifecycleOwner, Observer {
+            binding.questionNo.text = it
+        })
 
 
         sessionViewModel.isTestFinished.observe(viewLifecycleOwner, Observer {
@@ -115,6 +138,33 @@ class QuestionFragment : DaggerFragment() {
         )
 
     }
+
+
+    /**
+     * If the user clicks back in an active test session show a dialog
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            showAlertDialog()
+        }
+    }
+
+    /**
+     * Show alert on back pressed
+     */
+    private fun showAlertDialog() {
+        val builder = AlertDialog.Builder(this.requireContext())
+        builder.setTitle(R.string.ALERT_TITLE)
+        builder.setMessage(R.string.ALERT_TEXT)
+        builder.setPositiveButton(R.string.CONTINUE
+        ) { _, _ ->  Navigation.findNavController(binding.root).popBackStack() }
+        builder.setNegativeButton(R.string.CANCEL, null)
+        builder.show()
+    }
+
+
+
 
     private fun initViewModels() {
 

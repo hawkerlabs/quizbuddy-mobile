@@ -8,4 +8,5 @@ interface GetQuestionsByCategoryUseCase{
 
 
     fun invoke(categoryId : String): Single<List<Data>>
+
 }

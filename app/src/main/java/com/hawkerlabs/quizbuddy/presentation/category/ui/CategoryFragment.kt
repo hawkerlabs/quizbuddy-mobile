@@ -4,14 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-
+import androidx.navigation.Navigation
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.bumptech.glide.Glide
 import com.hawkerlabs.quizbuddy.R
 import com.hawkerlabs.quizbuddy.application.core.ViewModelFactory
+import com.hawkerlabs.quizbuddy.application.utils.Images
 import com.hawkerlabs.quizbuddy.databinding.CategoryFragmentBinding
 import com.hawkerlabs.quizbuddy.presentation.category.viewmodel.CategoryViewModel
+import com.hawkerlabs.quizbuddy.presentation.result.ui.ResultsFragmentDirections
 import com.hawkerlabs.quizbuddy.presentation.session.SessionViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.category_fragment.*
@@ -43,16 +48,25 @@ class CategoryFragment : DaggerFragment() {
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        initViewModels()
         initUi()
+        initViewModels()
         subscribeUi()
     }
+
+
+    /**
+     *
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            activity?.finish()
+        }
+    }
+
 
 
     /**
@@ -62,12 +76,21 @@ class CategoryFragment : DaggerFragment() {
         categoryViewModel.getDisplayCategories.observe(
             viewLifecycleOwner,
             Observer { categoriesListItemViewModel ->
+                refreshLayout.isRefreshing = false
                 categoriesListAdapter = CategoriesListAdapter()
                 categoriesListAdapter.onResults(categoriesListItemViewModel)
                 list.adapter = categoriesListAdapter
 
-                binding.progressBarHolder.visibility = View.GONE
             })
+
+
+
+        //On refresh call the viewmodels refresh method which will initiate the service call allover again
+        refreshLayout.setOnRefreshListener {
+            refreshLayout.isRefreshing = true
+            categoryViewModel.onRefresh()
+        }
+
 
     }
 
@@ -76,6 +99,12 @@ class CategoryFragment : DaggerFragment() {
      */
     private fun initUi() {
 
+        refreshLayout.isRefreshing = true
+        binding.collapsingToolbar.title = "Quiz Buddy"
+        Glide.with(binding.root.context)
+            .asBitmap()
+            .load(Images.DISPLAY).fitCenter()
+            .into(binding.image)
     }
 
     private fun initViewModels() {

@@ -7,12 +7,9 @@ import androidx.lifecycle.ViewModel
 import com.hawkerlabs.quizbuddy.application.core.dagger.module.SCHEDULER_IO
 import com.hawkerlabs.quizbuddy.application.core.dagger.module.SCHEDULER_MAIN_THREAD
 import com.hawkerlabs.quizbuddy.data.api.model.question.Data
-import com.hawkerlabs.quizbuddy.data.model.CurrentOption
-import com.hawkerlabs.quizbuddy.data.model.Question
-import com.hawkerlabs.quizbuddy.data.model.Result
+import com.hawkerlabs.quizbuddy.data.model.*
 
 
-import com.hawkerlabs.quizbuddy.data.model.Session
 import com.hawkerlabs.quizbuddy.domain.question.GetQuestionsByCategoryUseCase
 import com.hawkerlabs.quizbuddy.domain.session.SessionUseCase
 import io.reactivex.Scheduler
@@ -25,11 +22,30 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
                                            @Named(SCHEDULER_MAIN_THREAD) val observeOnScheduler: Scheduler
 ): ViewModel(){
 
+    /**
+     * Enum class to track button states
+     */
+    enum class SessionState {
+        FIRST_QUESTION,
+        ACTIVE_STATE,
+        LAST_QUESTION
+    }
+    private val _sessionState =
+        MutableLiveData<SessionState>(SessionState.FIRST_QUESTION)
+    val sessionState: LiveData<SessionState> = _sessionState
+
     private var _currentQuestion = MutableLiveData<Question>()
     private var _session = MutableLiveData<Session>()
     private var _result = MutableLiveData<Result>()
 
     private var selectedId = -1
+
+
+
+    private var _currentIndex = MutableLiveData<String>()
+    val currentIndex: LiveData<String> = _currentIndex
+
+
 
 
     private var _finishTest = MutableLiveData<Boolean>()
@@ -67,7 +83,17 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
     }
 
 
-    private fun onQuestionResponse(question : Data){
+    private fun onQuestionResponse( currentQuestion : CurrentQuestion){
+
+
+        val question  = currentQuestion.question
+        val currentIndex = currentQuestion.index
+
+        if(currentQuestion.questionIndex == 0){
+            _sessionState.value = SessionState.FIRST_QUESTION
+        } else{
+            _sessionState.value = SessionState.ACTIVE_STATE
+        }
 
         var currentOptions = mutableSetOf<CurrentOption>()
         var count = 1
@@ -85,10 +111,12 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
 
         if(question.options.isEmpty()){
             _finishTest.value = true
+            onFinishTest()
             getTestResults()
 
         } else {
             _currentQuestion.value = currentQuestion
+            _currentIndex.value = currentIndex
         }
 
 
@@ -112,10 +140,10 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
     }
 
 
-
+    /**
+     * Set the question value
+     */
     private fun onResponse(questions: List<Data>) {
-
-
         sessionUseCase.initSession(questions)
         getNextQuestion()
 
@@ -123,19 +151,40 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
     }
 
 
+    /**
+     *
+     */
     fun onFinishTest(){
-
+        sessionUseCase.finishTest()
     }
 
+
+    /**
+     * On new test session clean the existing question live data, we do this so that user does not see stale data from a previous test session,
+     * after we get the questions from the service call we set the value of the questions set again in onResponse
+     */
     @SuppressLint("CheckResult")
     fun onNewSession(categoryId : String){
+
         _finishTest.value = false
+        _currentQuestion.value = null
+
         getQuestionsByCategoryUseCase.invoke(categoryId).subscribeOn(subscribeOnScheduler)
             .observeOn(observeOnScheduler)
             .subscribe(this::onResponse, this::onError)
 
     }
 
+
+    @SuppressLint("CheckResult")
+    fun onPrevious(){
+
+
+        sessionUseCase.getPreviousQuestion().subscribeOn(subscribeOnScheduler)
+            .observeOn(observeOnScheduler)
+            .subscribe(this::onQuestionResponse, this::onError)
+
+    }
 
 
 
