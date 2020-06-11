@@ -18,26 +18,37 @@ class CategoryViewModel @Inject constructor(
     @Named(SCHEDULER_MAIN_THREAD) val observeOnScheduler: Scheduler
 ) : ViewModel() {
 
-    private var _categoriesListItemViewModel = MutableLiveData<ArrayList<CategoriesListItemViewModel>>()
-
-
-    val getDisplayCategories: LiveData<ArrayList<CategoriesListItemViewModel>>
-        get() = _categoriesListItemViewModel
-
+    private var _categoriesListItemViewModel =
+        MutableLiveData<ArrayList<CategoriesListItemViewModel>>()
     private var _categoriesList = ArrayList<CategoriesListItemViewModel>()
 
 
-    init {
-        getDisplayCategories()
+    private val categoriesListItemViewModelLiveData by lazy {
+        getDisplayCategoriesUseCase.invoke()
+            .subscribeOn(subscribeOnScheduler)
+            .observeOn(observeOnScheduler)
+            .subscribe(
+                this::onResponse
+                , this::onError
+            )
+        return@lazy _categoriesListItemViewModel
     }
 
-    public fun onRefresh(){
+
+    fun getDisplayCategories(): LiveData<ArrayList<CategoriesListItemViewModel>> =
+        categoriesListItemViewModelLiveData
+
+
+    /**
+     * Called on pull to refresh
+     */
+    fun onRefresh() {
         _categoriesList.clear()
-        getDisplayCategories()
+        refreshCategories()
     }
 
     @SuppressLint("CheckResult")
-    private fun getDisplayCategories() {
+    private fun refreshCategories() {
         getDisplayCategoriesUseCase.invoke()
             .subscribeOn(subscribeOnScheduler)
             .observeOn(observeOnScheduler)
@@ -51,16 +62,13 @@ class CategoryViewModel @Inject constructor(
         categories.map { item ->
             _categoriesList.add(CategoriesListItemViewModel(item))
         }
-
         _categoriesListItemViewModel.value = _categoriesList
     }
-
 
 
     private fun onError(error: Throwable) {
         error
     }
-
 
 
 }

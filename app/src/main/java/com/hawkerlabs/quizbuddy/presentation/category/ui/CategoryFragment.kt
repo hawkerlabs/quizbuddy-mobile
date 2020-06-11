@@ -43,8 +43,6 @@ class CategoryFragment : DaggerFragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.category_fragment, container, false)
 
 
-
-
         return binding.root
     }
 
@@ -68,12 +66,11 @@ class CategoryFragment : DaggerFragment() {
     }
 
 
-
     /**
      * Fire up the adapter after get categories service call
      */
     private fun subscribeUi() {
-        categoryViewModel.getDisplayCategories.observe(
+        categoryViewModel.getDisplayCategories().observe(
             viewLifecycleOwner,
             Observer { categoriesListItemViewModel ->
                 refreshLayout.isRefreshing = false
@@ -82,7 +79,6 @@ class CategoryFragment : DaggerFragment() {
                 list.adapter = categoriesListAdapter
 
             })
-
 
 
         //On refresh call the viewmodels refresh method which will initiate the service call allover again
