@@ -16,12 +16,12 @@ class CoursesListAdapter : RecyclerView.Adapter<CoursesListAdapter.ViewHolder>()
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CoursesListAdapter.ViewHolder {
+    ): ViewHolder {
         val binding: CoursesListItemBinding = DataBindingUtil.inflate(
-            LayoutInflater.from(parent.context), R.layout.categories_list_item,
+            LayoutInflater.from(parent.context), R.layout.courses_list_item,
             parent, false
         )
-        return CoursesListAdapter.ViewHolder(
+        return ViewHolder(
             binding
         )
     }
