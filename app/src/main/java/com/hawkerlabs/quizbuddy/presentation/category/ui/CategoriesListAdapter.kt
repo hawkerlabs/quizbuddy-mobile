@@ -36,10 +36,6 @@ class CategoriesListAdapter : RecyclerView.Adapter<CategoriesListAdapter.ViewHol
     }
 
 
-
-
-
-
     /**
      *
      */
