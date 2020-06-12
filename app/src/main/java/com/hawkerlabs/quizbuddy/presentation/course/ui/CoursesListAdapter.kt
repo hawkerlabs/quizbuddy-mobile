@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.hawkerlabs.quizbuddy.R
 import com.hawkerlabs.quizbuddy.databinding.CoursesListItemBinding
 import com.hawkerlabs.quizbuddy.presentation.category.viewmodel.CategoriesListItemViewModel
@@ -40,8 +41,8 @@ class CoursesListAdapter : RecyclerView.Adapter<CoursesListAdapter.ViewHolder>()
     }
 
     override fun onBindViewHolder(holder: CoursesListAdapter.ViewHolder, position: Int) {
-        val categoriesListItemViewModel = courses[position]
-        holder.bind(categoriesListItemViewModel)
+        val coursesListItemViewModel = courses[position]
+        holder.bind(coursesListItemViewModel)
     }
 
     class ViewHolder(private val binding: CoursesListItemBinding) :
@@ -56,6 +57,12 @@ class CoursesListAdapter : RecyclerView.Adapter<CoursesListAdapter.ViewHolder>()
 
 
             with(binding) {
+                Glide.with(root.context)
+                    .asBitmap()
+                    .load("https://d1z8nu24f2lody.cloudfront.net/courses/course_cbse.jpg")
+                    .centerCrop()
+                    .into(binding.itemImageView)
+
 
               /*  Glide.with(root.context)
                     .asBitmap()
