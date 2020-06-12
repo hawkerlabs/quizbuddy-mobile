@@ -7,36 +7,86 @@ import androidx.lifecycle.ViewModel
 import com.hawkerlabs.quizbuddy.application.core.dagger.module.SCHEDULER_IO
 import com.hawkerlabs.quizbuddy.application.core.dagger.module.SCHEDULER_MAIN_THREAD
 import com.hawkerlabs.quizbuddy.data.api.model.Category
+import com.hawkerlabs.quizbuddy.data.model.Course
 import com.hawkerlabs.quizbuddy.domain.category.GetDisplayCategoriesUseCase
+import com.hawkerlabs.quizbuddy.domain.course.GetFeaturedCoursesUseCase
+import com.hawkerlabs.quizbuddy.presentation.course.viewmodel.CoursesListItemViewModel
+import io.reactivex.Observable
 import io.reactivex.Scheduler
+import io.reactivex.Single
+import io.reactivex.functions.BiFunction
+
 import javax.inject.Inject
 import javax.inject.Named
 
+
+/**
+ * Model to handle page state
+ */
+data class PageState(
+    val categories: List<CategoriesListItemViewModel>,
+    val courses: List<CoursesListItemViewModel>,
+    val isSuccess: Boolean
+)
+
+
 class CategoryViewModel @Inject constructor(
     private val getDisplayCategoriesUseCase: GetDisplayCategoriesUseCase,
+    private val getFeaturedCoursesUseCase: GetFeaturedCoursesUseCase,
     @Named(SCHEDULER_IO) val subscribeOnScheduler: Scheduler,
     @Named(SCHEDULER_MAIN_THREAD) val observeOnScheduler: Scheduler
 ) : ViewModel() {
 
-    private var _categoriesListItemViewModel =
-        MutableLiveData<ArrayList<CategoriesListItemViewModel>>()
+
     private var _categoriesList = ArrayList<CategoriesListItemViewModel>()
+    private var _coursesList = ArrayList<CoursesListItemViewModel>()
 
 
-    private val categoriesListItemViewModelLiveData by lazy {
-        getDisplayCategoriesUseCase.invoke()
-            .subscribeOn(subscribeOnScheduler)
+    private var _pageState =
+        MutableLiveData<PageState>()
+
+    private val pageState by lazy {
+        execute().subscribeOn(subscribeOnScheduler)
             .observeOn(observeOnScheduler)
             .subscribe(
-                this::onResponse
+                this::onResponsePageState
                 , this::onError
             )
-        return@lazy _categoriesListItemViewModel
+        return@lazy _pageState
     }
 
 
-    fun getDisplayCategories(): LiveData<ArrayList<CategoriesListItemViewModel>> =
-        categoriesListItemViewModelLiveData
+    private fun execute(): Single<PageState> {
+
+        return Single.zip(
+            getDisplayCategoriesUseCase.invoke(),
+            getFeaturedCoursesUseCase.invoke(),
+
+            BiFunction
+            { categories, courses ->
+                createPageState(categories, courses)
+            })
+    }
+
+
+    private fun createPageState(
+        categories: List<Category>,
+        courses: List<Course>
+
+    ): PageState {
+        categories.map { category ->
+            _categoriesList.add(CategoriesListItemViewModel(category))
+        }
+
+        courses.map { course ->
+            _coursesList.add(CoursesListItemViewModel(course))
+        }
+
+        return PageState(_categoriesList, _coursesList, true)
+    }
+
+    fun getPageState(): LiveData<PageState> =
+        pageState
 
 
     /**
@@ -44,30 +94,28 @@ class CategoryViewModel @Inject constructor(
      */
     fun onRefresh() {
         _categoriesList.clear()
-        refreshCategories()
+        _coursesList.clear()
+
+        refresh()
     }
 
     @SuppressLint("CheckResult")
-    private fun refreshCategories() {
-        getDisplayCategoriesUseCase.invoke()
-            .subscribeOn(subscribeOnScheduler)
+    private fun refresh() {
+        execute().subscribeOn(subscribeOnScheduler)
             .observeOn(observeOnScheduler)
-            .subscribe(this::onResponse, this::onError)
+            .subscribe(
+                this::onResponsePageState
+                , this::onError
+            )
     }
 
-    /**
-     * Response handler
-     */
-    private fun onResponse(categories: List<Category>) {
-        categories.map { item ->
-            _categoriesList.add(CategoriesListItemViewModel(item))
-        }
-        _categoriesListItemViewModel.value = _categoriesList
+    private fun onResponsePageState(state: PageState) {
+        _pageState.value = state
     }
 
 
     private fun onError(error: Throwable) {
-        error
+        PageState(_categoriesList, _coursesList, false)
     }
 
 

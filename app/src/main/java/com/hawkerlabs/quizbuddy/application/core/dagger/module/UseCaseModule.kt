@@ -2,6 +2,8 @@ package com.hawkerlabs.quizbuddy.application.core.dagger.module
 
 import com.hawkerlabs.quizbuddy.domain.category.GetDisplayCategoriesUseCase
 import com.hawkerlabs.quizbuddy.domain.category.impl.GetDisplayCategoriesUseCaseImpl
+import com.hawkerlabs.quizbuddy.domain.course.GetFeaturedCoursesUseCase
+import com.hawkerlabs.quizbuddy.domain.course.impl.GetFeaturedCoursesUseCaseImpl
 import com.hawkerlabs.quizbuddy.domain.question.GetQuestionsByCategoryUseCase
 import com.hawkerlabs.quizbuddy.domain.question.impl.GetQuestionsByCategoryUseCaseImpl
 import com.hawkerlabs.quizbuddy.domain.session.GetScoreUseCase
@@ -26,6 +28,10 @@ abstract class UseCaseModule {
 
     @Binds
     abstract fun provideGetScoreUseCase(getScoreUseCase: GetScoreUseCaseImpl): GetScoreUseCase
+
+    @Binds
+    abstract fun provideGetFeaturedCoursesUseCase(getFeaturedCoursesUseCase: GetFeaturedCoursesUseCaseImpl): GetFeaturedCoursesUseCase
+
 
 
 
