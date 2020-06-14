@@ -69,6 +69,9 @@ class CategoryViewModel @Inject constructor(
     }
 
 
+    /**
+     *
+     */
     private fun createPageState(
         categories: List<Category>,
         courses: List<Course>

@@ -99,6 +99,9 @@ class CategoryFragment : DaggerFragment() {
         }
 
 
+
+
+
     }
 
     /**
@@ -106,7 +109,7 @@ class CategoryFragment : DaggerFragment() {
      */
     private fun initUi() {
 
-//        refreshLayout.isRefreshing = true
+        refreshLayout.isRefreshing = true
         binding.collapsingToolbar.title = "Quiz Buddy"
         Glide.with(binding.root.context)
             .asBitmap()

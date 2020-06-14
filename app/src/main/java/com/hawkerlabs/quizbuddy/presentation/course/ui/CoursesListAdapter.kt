@@ -2,7 +2,9 @@ package com.hawkerlabs.quizbuddy.presentation.course.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hawkerlabs.quizbuddy.R
@@ -64,18 +66,13 @@ class CoursesListAdapter : RecyclerView.Adapter<CoursesListAdapter.ViewHolder>()
                     .into(binding.itemImageView)
 
 
-              /*  Glide.with(root.context)
-                    .asBitmap()
-                    .load(categoriesListItemViewModel.image)
-                    .centerCrop()
-                    .into(binding.categoryImage)
 
-                binding.categoryImage.setOnClickListener {
-                    var bundle = bundleOf("categoryId" to categoriesListItemViewModel.id)
+
+                binding.courseCard.setOnClickListener {
+                    var bundle = bundleOf("courseId" to coursesListItemViewModel.id)
                     it.findNavController()
-                        .navigate(R.id.questionFragment, bundle)
+                        .navigate(R.id.subjectFragment, bundle)
                 }
-                viewModel = categoriesListItemViewModel*/
                 viewModel = coursesListItemViewModel
             }
 

@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.hawkerlabs.quizbuddy.presentation.course.viewmodel.CoursesListItemViewModel" />
+            type="com.hawkerlabs.quizbuddy.presentation.subject.viewmodel.SubjectListItemViewModel" />
 
     </data>
 
@@ -61,7 +61,7 @@
                     android:padding="8dp"
                     android:paddingEnd="16dp"
                     android:paddingStart="16dp"
-                    android:text="@{viewModel.name}"
+                    android:text="@{viewModel.title}"
                     android:textAlignment="textStart"
                     android:textColor="@color/md_grey_800"
                     android:textSize="@dimen/font_body_size"
