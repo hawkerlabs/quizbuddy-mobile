@@ -14,6 +14,8 @@ data class Subject(
     val id: String = "",
     @JsonProperty("isVisible")
     val isVisible: Boolean = false,
+    @JsonProperty("questions")
+    val questions: List<String> = listOf(),
     @JsonProperty("title")
     val title: String = "",
     @JsonProperty("updatedAt")

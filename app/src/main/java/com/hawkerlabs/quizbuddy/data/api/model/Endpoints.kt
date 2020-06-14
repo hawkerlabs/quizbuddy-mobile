@@ -5,6 +5,7 @@ object Endpoints {
     const val CATEGORIES = "categories"
     const val QUESTIONS = "questions"
     const val COURSES = "courses"
+    const val SUBJECTS = "subjects"
 
 
 }

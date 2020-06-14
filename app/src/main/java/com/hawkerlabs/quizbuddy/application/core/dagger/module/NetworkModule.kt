@@ -3,6 +3,7 @@ package com.hawkerlabs.quizbuddy.application.core.dagger.module
 import com.hawkerlabs.quizbuddy.data.api.CategoriesApi
 import com.hawkerlabs.quizbuddy.data.api.CourseApi
 import com.hawkerlabs.quizbuddy.data.api.QuestionsApi
+import com.hawkerlabs.quizbuddy.data.api.SubjectsApi
 import com.hawkerlabs.quizbuddy.data.api.model.Endpoints
 import dagger.Module
 import dagger.Provides
@@ -31,6 +32,11 @@ class NetworkModule {
     @Provides
     fun provideCourseApi(retrofit: Retrofit): CourseApi {
         return retrofit.create(CourseApi::class.java)
+    }
+
+    @Provides
+    fun provideSubjectsApi(retrofit: Retrofit): SubjectsApi {
+        return retrofit.create(SubjectsApi::class.java)
     }
 
 

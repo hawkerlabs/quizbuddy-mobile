@@ -10,6 +10,8 @@ import com.hawkerlabs.quizbuddy.domain.session.GetScoreUseCase
 import com.hawkerlabs.quizbuddy.domain.session.SessionUseCase
 import com.hawkerlabs.quizbuddy.domain.session.impl.GetScoreUseCaseImpl
 import com.hawkerlabs.quizbuddy.domain.session.impl.SessionUseCaseImpl
+import com.hawkerlabs.quizbuddy.domain.subject.GetSubjectsByCategoryUseCase
+import com.hawkerlabs.quizbuddy.domain.subject.impl.GetSubjectsByCategoryUseCaseImpl
 import dagger.Binds
 import dagger.Module
 
@@ -32,9 +34,8 @@ abstract class UseCaseModule {
     @Binds
     abstract fun provideGetFeaturedCoursesUseCase(getFeaturedCoursesUseCase: GetFeaturedCoursesUseCaseImpl): GetFeaturedCoursesUseCase
 
-
-
-
+    @Binds
+    abstract fun provideGetSubjectsByCategoryUseCase(getSubjectsByCategoryUseCase: GetSubjectsByCategoryUseCaseImpl): GetSubjectsByCategoryUseCase
 
 
 }
