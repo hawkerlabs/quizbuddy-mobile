@@ -1,9 +1,11 @@
 package com.hawkerlabs.quizbuddy.data.model
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Subject(
+
     @JsonProperty("class")
     val classX: String = "",
     @JsonProperty("course")
@@ -14,6 +16,7 @@ data class Subject(
     val id: String = "",
     @JsonProperty("isVisible")
     val isVisible: Boolean = false,
+    @JsonIgnore
     @JsonProperty("questions")
     val questions: List<String> = listOf(),
     @JsonProperty("title")
@@ -22,4 +25,5 @@ data class Subject(
     val updatedAt: String = "",
     @JsonProperty("__v")
     val v: Int = 0
+
 )

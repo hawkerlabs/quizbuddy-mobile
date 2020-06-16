@@ -5,11 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.hawkerlabs.quizbuddy.R
 import com.hawkerlabs.quizbuddy.application.core.ViewModelFactory
+import com.hawkerlabs.quizbuddy.application.core.ui.MarginItemDecoration
 import com.hawkerlabs.quizbuddy.databinding.SubjectFragmentBinding
+import com.hawkerlabs.quizbuddy.presentation.category.ui.CategoriesListAdapter
 import com.hawkerlabs.quizbuddy.presentation.category.viewmodel.CategoryViewModel
 import com.hawkerlabs.quizbuddy.presentation.session.SessionViewModel
 import com.hawkerlabs.quizbuddy.presentation.subject.viewmodel.SubjectsViewModel
@@ -23,6 +29,9 @@ class SubjectFragment : DaggerFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
+
+    private  var subjectsListAdapter: SubjectsListAdapter = SubjectsListAdapter()
+
 
     private lateinit var subjectsViewModel: SubjectsViewModel
     private lateinit var courseId: String
@@ -54,6 +63,17 @@ class SubjectFragment : DaggerFragment() {
         toolbar.setOnClickListener {
             Navigation.findNavController(binding.root).popBackStack()
         }
+        list.adapter = subjectsListAdapter
+        val mLayoutManager = GridLayoutManager(list.context, 2)
+
+        list.layoutManager = mLayoutManager
+        list.itemAnimator = DefaultItemAnimator()
+
+//        list.layoutManager = LinearLayoutManager(list.context, LinearLayoutManager.VERTICAL, false)
+//        list.addItemDecoration(
+//            MarginItemDecoration(
+//                resources.getDimension(R.dimen.list_item_spacing).toInt())
+//        )
 
     }
     private fun initViewModels() {
@@ -68,7 +88,10 @@ class SubjectFragment : DaggerFragment() {
     }
 
     private fun subscribeUi() {
-        subjectsViewModel.getSubjects()
+        subjectsViewModel.getSubjects(courseId).observe(viewLifecycleOwner, Observer {
+
+            subjectsListAdapter.onResults(it)
+        })
     }
 
 }

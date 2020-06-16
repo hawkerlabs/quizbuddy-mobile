@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.hawkerlabs.quizbuddy.R
 import com.hawkerlabs.quizbuddy.databinding.SubjectsListItemBinding
+import com.hawkerlabs.quizbuddy.presentation.category.viewmodel.CategoriesListItemViewModel
 
 import com.hawkerlabs.quizbuddy.presentation.subject.viewmodel.SubjectListItemViewModel
 
@@ -29,6 +30,13 @@ class SubjectsListAdapter : RecyclerView.Adapter<SubjectsListAdapter.ViewHolder>
         )
     }
 
+    /**
+     *
+     */
+    public fun onResults(subjects: List<SubjectListItemViewModel>) {
+        this.subjects = subjects
+        notifyDataSetChanged()
+    }
 
     /**
      *
@@ -60,11 +68,7 @@ class SubjectsListAdapter : RecyclerView.Adapter<SubjectsListAdapter.ViewHolder>
             with(binding) {
 
 
-//                binding.courseCard.setOnClickListener {
-//                    var bundle = bundleOf("courseId" to coursesListItemViewModel.id)
-//                    it.findNavController()
-//                        .navigate(R.id.subjectFragment, bundle)
-//                }
+
                 viewModel = subjectListItemViewModel
             }
 

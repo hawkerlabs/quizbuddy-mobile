@@ -8,48 +8,72 @@ import com.hawkerlabs.quizbuddy.application.core.dagger.module.SCHEDULER_MAIN_TH
 import com.hawkerlabs.quizbuddy.data.model.Subject
 
 import com.hawkerlabs.quizbuddy.domain.subject.GetSubjectsByCategoryUseCase
+import com.hawkerlabs.quizbuddy.presentation.category.viewmodel.CategoriesListItemViewModel
 import com.hawkerlabs.quizbuddy.presentation.category.viewmodel.PageState
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Named
 
+
+/**
+ * Ref: https://discuss.kotlinlang.org/t/support-lazy-argument-in-functions/2127
+ */
 class SubjectsViewModel @Inject constructor(
     private val getSubjectsByCategoryUseCase: GetSubjectsByCategoryUseCase,
     @Named(SCHEDULER_IO) val subscribeOnScheduler: Scheduler,
     @Named(SCHEDULER_MAIN_THREAD) val observeOnScheduler: Scheduler
 ) : ViewModel() {
 
-//    private var _subjects =
-//        MutableLiveData<List<SubjectListItemViewModel>>()
-//
-//
-//    private val subjects by lazy {
-//        execute().subscribeOn(subscribeOnScheduler)
-//            .observeOn(observeOnScheduler)
-//            .subscribe(
-//                this::onResponsePageState
-//                ,this::onError
-//            )
-//        return@lazy _subjects
-//    }
-//
-//
-//
-//    fun getSubjects(): LiveData<List<SubjectListItemViewModel>> = subjects
-//
-//
-//    private fun execute(): Single<List<SubjectListItemViewModel>> {
-//        getSubjectsByCategoryUseCase.get
-//        return Single.zip(
-//            getDisplayCategoriesUseCase.invoke(),
-//            getFeaturedCoursesUseCase.invoke(),
-//
-//            BiFunction
-//            { categories, courses ->
-//                createPageState(categories, courses)
-//            })
-//    }
+    private lateinit var courseId :String
+    private var _subjectsList = ArrayList<SubjectListItemViewModel>()
+    private var _subjects =
+        MutableLiveData<List<SubjectListItemViewModel>>()
+
+
+    val loadSubjects: () -> MutableLiveData<List<SubjectListItemViewModel>> = {
+        _subjectsList.clear()
+        execute(courseId).subscribeOn(subscribeOnScheduler)
+            .observeOn(observeOnScheduler)
+            .subscribe(
+                this::onResponse
+                ,this::onError
+            )
+        _subjects
+    }
+
+
+    /**
+     *
+     */
+    fun getSubjects(courseId : String): LiveData<List<SubjectListItemViewModel>> {
+
+        this.courseId = courseId
+        return loadSubjects()
+    }
+
+
+
+
+    private fun onResponse(subjectsListResponse : List<Subject>){
+        subjectsListResponse.map { subject ->
+            _subjectsList.add(SubjectListItemViewModel(subject))
+        }
+        _subjects.value = _subjectsList
+    }
+
+    private fun onError(error: Throwable) {
+        error
+    }
+
+
+    /**
+     * Get subjects for the courseID
+     */
+    private fun execute(courseId : String): Single<List<Subject>> {
+       return  getSubjectsByCategoryUseCase.invoke(courseId)
+
+    }
 
 
 }

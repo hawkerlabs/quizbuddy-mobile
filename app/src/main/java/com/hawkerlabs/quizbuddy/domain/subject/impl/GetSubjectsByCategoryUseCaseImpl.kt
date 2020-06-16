@@ -6,6 +6,7 @@ import com.hawkerlabs.quizbuddy.domain.subject.GetSubjectsByCategoryUseCase
 import io.reactivex.Single
 import javax.inject.Inject
 
+
 class GetSubjectsByCategoryUseCaseImpl @Inject constructor(private val subjectsRepository: SubjectsRepository) :
     GetSubjectsByCategoryUseCase {
 
@@ -14,11 +15,13 @@ class GetSubjectsByCategoryUseCaseImpl @Inject constructor(private val subjectsR
      * Return subjects only which have question count greater than 10
      */
     override fun invoke(courseId: String): Single<List<Subject>> {
-        return subjectsRepository.getSubjectByCourse(courseId).map {
-            it.filter { subject ->
-                subject.questions.count() > 10
-            }
-        }
+
+        return subjectsRepository.getSubjectByCourse(courseId)
+//        return subjectsRepository.getSubjectByCourse(courseId).map {
+//            it.filter { subject ->
+//                subject.questions.count() > 10
+//            }
+//        }
     }
 
 }
