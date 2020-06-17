@@ -2,7 +2,9 @@ package com.hawkerlabs.quizbuddy.presentation.subject.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.hawkerlabs.quizbuddy.R
 import com.hawkerlabs.quizbuddy.databinding.SubjectsListItemBinding
@@ -67,8 +69,11 @@ class SubjectsListAdapter : RecyclerView.Adapter<SubjectsListAdapter.ViewHolder>
 
             with(binding) {
 
-
-
+                subjectCard.setOnClickListener{
+                    var bundle = bundleOf("subjectId" to subjectListItemViewModel.id, "mode" to "subject")
+//                    it.findNavController()
+//                        .navigate(R.id.questionFragment, bundle)
+                }
                 viewModel = subjectListItemViewModel
             }
 

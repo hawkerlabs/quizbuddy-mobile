@@ -75,7 +75,7 @@ class CategoriesListAdapter : RecyclerView.Adapter<CategoriesListAdapter.ViewHol
                     .centerCrop()
                     .into(binding.categoryImage)
 
-                binding.categoryImage.setOnClickListener {
+                categoryImage.setOnClickListener {
                     var bundle = bundleOf("categoryId" to categoriesListItemViewModel.id)
                     it.findNavController()
                         .navigate(R.id.questionFragment, bundle)

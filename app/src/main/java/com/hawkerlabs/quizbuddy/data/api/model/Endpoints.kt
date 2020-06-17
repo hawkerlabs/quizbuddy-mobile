@@ -6,6 +6,7 @@ object Endpoints {
     const val QUESTIONS = "questions"
     const val COURSES = "courses"
     const val SUBJECTS = "subjects"
+    const val QUIZ = "quiz"
 
 
 }

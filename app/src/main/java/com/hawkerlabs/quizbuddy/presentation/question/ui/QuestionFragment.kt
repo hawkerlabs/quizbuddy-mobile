@@ -51,8 +51,6 @@ class QuestionFragment : DaggerFragment() {
     }
 
 
-
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initViewModels()
@@ -114,7 +112,7 @@ class QuestionFragment : DaggerFragment() {
         })
 
 
-        sessionViewModel.sessionState.observe(viewLifecycleOwner, Observer {sessionState ->
+        sessionViewModel.sessionState.observe(viewLifecycleOwner, Observer { sessionState ->
             when (sessionState) {
                 SessionViewModel.SessionState.FIRST_QUESTION -> binding.previous.isEnabled = false
                 SessionViewModel.SessionState.ACTIVE_STATE -> binding.previous.isEnabled = true
@@ -157,13 +155,12 @@ class QuestionFragment : DaggerFragment() {
         val builder = AlertDialog.Builder(this.requireContext())
         builder.setTitle(R.string.ALERT_TITLE)
         builder.setMessage(R.string.ALERT_TEXT)
-        builder.setPositiveButton(R.string.CONTINUE
-        ) { _, _ ->  Navigation.findNavController(binding.root).popBackStack() }
+        builder.setPositiveButton(
+            R.string.CONTINUE
+        ) { _, _ -> Navigation.findNavController(binding.root).popBackStack() }
         builder.setNegativeButton(R.string.CANCEL, null)
         builder.show()
     }
-
-
 
 
     private fun initViewModels() {
