@@ -7,6 +7,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface QuizApi {
-    @GET(Endpoints.QUESTIONS)
+    @GET(Endpoints.QUIZ)
     fun getQuestionsBySubject(@Query("subject") subjectId: String): Single<QuestionsResponse>
 }
