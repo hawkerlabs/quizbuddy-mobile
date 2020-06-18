@@ -28,6 +28,8 @@ import javax.inject.Inject
  *  https://thoughtbot.com/blog/finite-state-machines-android-kotlin-good-times#defining-our-finite-state-machine
  *
  * https://help.github.com/en/github/using-git/updating-credentials-from-the-osx-keychain
+ *
+ * https://medium.com/@gabrieldemattosleon/fundamentals-of-rxjava-with-kotlin-for-absolute-beginners-3d811350b701
  */
 class MainActivity : DaggerAppCompatActivity() {
 

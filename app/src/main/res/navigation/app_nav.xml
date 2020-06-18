@@ -13,6 +13,9 @@
         android:name="com.hawkerlabs.quizbuddy.presentation.category.ui.CategoryFragment"
         android:label="CategoryFragment" >
 
+        <action
+            android:id="@+id/action_categoryFragment_to_subjectFragment"
+            app:destination="@id/subjectFragment" />
     </fragment>
     <fragment
         android:id="@+id/questionFragment"
@@ -32,8 +35,10 @@
             android:id="@+id/action_resultsFragment_to_categoryFragment"
             app:destination="@id/categoryFragment" />
     </fragment>
-
-
+    <fragment
+        android:id="@+id/subjectFragment"
+        android:name="com.hawkerlabs.quizbuddy.presentation.subject.ui.SubjectFragment"
+        android:label="SubjectFragment" />
 
 
 </navigation>
