@@ -39,13 +39,36 @@
             android:background="@color/md_grey_100"
 
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <RelativeLayout
+                android:id="@+id/progressBarHolder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:gravity="center"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ProgressBar
+                    android:id="@+id/progressBar1"
+                    style="?android:attr/progressBarStyleLargeInverse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+
+                    />
+            </RelativeLayout>
             <TextView
                 android:id="@+id/listText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="18dp"
-                android:text="Select Subject"
-                android:textSize="19sp"
+                android:text="@string/select_subject"
+                android:textSize="@dimen/font_body_size_19"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@+id/list"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -59,6 +82,7 @@
                 android:layout_height="0dp"
                 android:layout_margin="@dimen/space_4"
                 android:fadeScrollbars="false"
+                android:visibility="gone"
                 android:scrollbars="none"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -67,46 +91,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
-<!--        <FrameLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_marginTop="?android:attr/actionBarSize"-->
-<!--            tools:context=".ui.inventory.fragments.InventoryFragment">-->
-
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                android:id="@+id/list"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:layout_margin="@dimen/space_4"-->
-
-<!--                android:clipToPadding="false"-->
-<!--                android:padding="@dimen/margin_normal"-->
-<!--                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent" />-->
-<!--        </FrameLayout>-->
-<!--       <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--           android:layout_marginTop="?android:attr/actionBarSize">-->
-<!--           <androidx.recyclerview.widget.RecyclerView-->
-<!--               android:id="@+id/list"-->
-<!--               android:layout_width="match_parent"-->
-<!--               android:layout_height="wrap_content"-->
-<!--               android:layout_margin="18dp"-->
-<!--               android:clipToPadding="false"-->
-<!--               android:padding="@dimen/margin_normal"-->
-<!--               app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-<!--               app:layout_constraintBottom_toBottomOf="parent"-->
-<!--               app:layout_constraintEnd_toEndOf="parent"-->
-<!--               app:layout_constraintStart_toStartOf="parent"-->
-<!--               app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

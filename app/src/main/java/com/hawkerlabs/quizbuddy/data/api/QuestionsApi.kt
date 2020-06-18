@@ -11,6 +11,6 @@ interface QuestionsApi {
     /**
      * Get Questions
      */
-    @GET(Endpoints.QUIZ)
-    fun getQuestionsByCategory(@Query("subject") subjectId: String): Single<QuestionsResponse>
+    @GET(Endpoints.QUESTIONS)
+    fun getQuestionsByCategory(@Query("category") categoryId: String): Single<QuestionsResponse>
 }

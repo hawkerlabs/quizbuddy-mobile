@@ -10,14 +10,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.hawkerlabs.quizbuddy.R
 import com.hawkerlabs.quizbuddy.application.core.ViewModelFactory
-import com.hawkerlabs.quizbuddy.application.core.ui.MarginItemDecoration
 import com.hawkerlabs.quizbuddy.databinding.SubjectFragmentBinding
-import com.hawkerlabs.quizbuddy.presentation.category.ui.CategoriesListAdapter
-import com.hawkerlabs.quizbuddy.presentation.category.viewmodel.CategoryViewModel
-import com.hawkerlabs.quizbuddy.presentation.session.SessionViewModel
+
 import com.hawkerlabs.quizbuddy.presentation.subject.viewmodel.SubjectsViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.subject_fragment.*
@@ -30,7 +26,7 @@ class SubjectFragment : DaggerFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-    private  var subjectsListAdapter: SubjectsListAdapter = SubjectsListAdapter()
+    private var subjectsListAdapter: SubjectsListAdapter = SubjectsListAdapter()
 
 
     private lateinit var subjectsViewModel: SubjectsViewModel
@@ -59,7 +55,7 @@ class SubjectFragment : DaggerFragment() {
     }
 
 
-    private fun initUi(){
+    private fun initUi() {
         toolbar.setOnClickListener {
             Navigation.findNavController(binding.root).popBackStack()
         }
@@ -69,13 +65,9 @@ class SubjectFragment : DaggerFragment() {
         list.layoutManager = mLayoutManager
         list.itemAnimator = DefaultItemAnimator()
 
-//        list.layoutManager = LinearLayoutManager(list.context, LinearLayoutManager.VERTICAL, false)
-//        list.addItemDecoration(
-//            MarginItemDecoration(
-//                resources.getDimension(R.dimen.list_item_spacing).toInt())
-//        )
 
     }
+
     private fun initViewModels() {
 
         activity?.let {
@@ -89,9 +81,24 @@ class SubjectFragment : DaggerFragment() {
 
     private fun subscribeUi() {
         subjectsViewModel.getSubjects(courseId).observe(viewLifecycleOwner, Observer {
-
             subjectsListAdapter.onResults(it)
         })
+
+
+        subjectsViewModel.getLoadState.observe(viewLifecycleOwner, Observer {
+
+            if (!it) {
+                listText.visibility = View.VISIBLE
+                list.visibility = View.VISIBLE
+                progressBarHolder.visibility = View.GONE
+            } else {
+                listText.visibility = View.GONE
+                list.visibility = View.GONE
+                progressBarHolder.visibility = View.VISIBLE
+            }
+
+        })
+
     }
 
 }

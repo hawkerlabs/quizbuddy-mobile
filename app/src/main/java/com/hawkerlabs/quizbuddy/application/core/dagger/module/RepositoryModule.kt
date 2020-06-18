@@ -1,13 +1,7 @@
 package com.hawkerlabs.quizbuddy.application.core.dagger.module
 
-import com.hawkerlabs.quizbuddy.data.repository.CategoriesRepository
-import com.hawkerlabs.quizbuddy.data.repository.CoursesRepository
-import com.hawkerlabs.quizbuddy.data.repository.QuestionsRepository
-import com.hawkerlabs.quizbuddy.data.repository.SubjectsRepository
-import com.hawkerlabs.quizbuddy.data.repository.impl.CategoriesRepositoryImpl
-import com.hawkerlabs.quizbuddy.data.repository.impl.CoursesRepositoryImpl
-import com.hawkerlabs.quizbuddy.data.repository.impl.QuestionsRepositoryImpl
-import com.hawkerlabs.quizbuddy.data.repository.impl.SubjectsRepositoryImpl
+import com.hawkerlabs.quizbuddy.data.repository.*
+import com.hawkerlabs.quizbuddy.data.repository.impl.*
 import dagger.Binds
 import dagger.Module
 
@@ -25,5 +19,8 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun provideSubjectsRepository(subjectsRepository: SubjectsRepositoryImpl): SubjectsRepository
+
+    @Binds
+    abstract fun provideQuizRepository(quizRepository: QuizRepositoryImpl): QuizRepository
 
 }

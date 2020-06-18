@@ -3,6 +3,8 @@
 
     <string name="world_knowledge">World Knowledge</string>
 
+    <!-- Subject   -->
+    <string name="select_subject">Select Subject</string>
 
     <!-- Question   -->
     <string name="previous">Previous</string>

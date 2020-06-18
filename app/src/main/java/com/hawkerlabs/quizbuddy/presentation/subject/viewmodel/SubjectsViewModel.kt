@@ -10,6 +10,7 @@ import com.hawkerlabs.quizbuddy.data.model.Subject
 import com.hawkerlabs.quizbuddy.domain.subject.GetSubjectsByCategoryUseCase
 import com.hawkerlabs.quizbuddy.presentation.category.viewmodel.CategoriesListItemViewModel
 import com.hawkerlabs.quizbuddy.presentation.category.viewmodel.PageState
+import com.hawkerlabs.quizbuddy.presentation.course.viewmodel.CoursesListItemViewModel
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import javax.inject.Inject
@@ -19,11 +20,18 @@ import javax.inject.Named
 /**
  * Ref: https://discuss.kotlinlang.org/t/support-lazy-argument-in-functions/2127
  */
+
+
+
+
 class SubjectsViewModel @Inject constructor(
     private val getSubjectsByCategoryUseCase: GetSubjectsByCategoryUseCase,
     @Named(SCHEDULER_IO) val subscribeOnScheduler: Scheduler,
     @Named(SCHEDULER_MAIN_THREAD) val observeOnScheduler: Scheduler
 ) : ViewModel() {
+    private var _isLoading = MutableLiveData<Boolean>()
+    val getLoadState: LiveData<Boolean>
+        get() = _isLoading
 
     private lateinit var courseId :String
     private var _subjectsList = ArrayList<SubjectListItemViewModel>()
@@ -56,6 +64,7 @@ class SubjectsViewModel @Inject constructor(
 
 
     private fun onResponse(subjectsListResponse : List<Subject>){
+        _isLoading.value = false
         subjectsListResponse.map { subject ->
             _subjectsList.add(SubjectListItemViewModel(subject))
         }
@@ -71,6 +80,7 @@ class SubjectsViewModel @Inject constructor(
      * Get subjects for the courseID
      */
     private fun execute(courseId : String): Single<List<Subject>> {
+        _isLoading.value = true
        return  getSubjectsByCategoryUseCase.invoke(courseId)
 
     }

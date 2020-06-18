@@ -70,9 +70,9 @@ class SubjectsListAdapter : RecyclerView.Adapter<SubjectsListAdapter.ViewHolder>
             with(binding) {
 
                 subjectCard.setOnClickListener{
-                    var bundle = bundleOf("subjectId" to subjectListItemViewModel.id, "mode" to "subject")
-//                    it.findNavController()
-//                        .navigate(R.id.questionFragment, bundle)
+                    var bundle = bundleOf("subjectId" to subjectListItemViewModel.id)
+                    it.findNavController()
+                        .navigate(R.id.questionFragment, bundle)
                 }
                 viewModel = subjectListItemViewModel
             }
