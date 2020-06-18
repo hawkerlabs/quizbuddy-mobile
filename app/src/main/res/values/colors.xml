@@ -13,12 +13,15 @@
     <color name="md_white_1000">#FFFFFF</color>
 
     <color name="blue_grey_600">#546E7A</color>
+    <color name="md_grey_800">#424242</color>
+
     <color name="grey_3">#f7f7f7</color>
 
     <color name="yellow">#ffff8d</color>
     <color name="blue">#2979ff</color>
 
 
+    <color name="md_grey_100">#F5F5F5</color>
 
 
 </resources>

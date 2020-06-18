@@ -4,6 +4,7 @@ import com.hawkerlabs.quizbuddy.MainActivity
 import com.hawkerlabs.quizbuddy.presentation.category.ui.CategoryFragment
 import com.hawkerlabs.quizbuddy.presentation.question.ui.QuestionFragment
 import com.hawkerlabs.quizbuddy.presentation.result.ui.ResultsFragment
+import com.hawkerlabs.quizbuddy.presentation.subject.ui.SubjectFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -21,6 +22,10 @@ abstract class BindingModule {
 
     @ContributesAndroidInjector
     abstract fun bindResultsFragment(): ResultsFragment
+
+    @ContributesAndroidInjector
+    abstract fun bindSubjectFragment(): SubjectFragment
+
 
 
 

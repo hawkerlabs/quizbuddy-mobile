@@ -1,11 +1,10 @@
-package com.hawkerlabs.quizbuddy.data.api.model.question
+package com.hawkerlabs.quizbuddy.data.api.model
 
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.hawkerlabs.quizbuddy.data.api.model.question.Option
 
-data class Data(
-    @JsonProperty("category")
-    val category: String = "",
+data class Result(
     @JsonProperty("createdAt")
     val createdAt: String = "",
     @JsonProperty("_id")
@@ -16,6 +15,8 @@ data class Data(
     val options: List<Option> = listOf(),
     @JsonProperty("question")
     val question: String = "",
+    @JsonProperty("subject")
+    val subject: String = "",
     @JsonProperty("updatedAt")
     val updatedAt: String = "",
     @JsonProperty("__v")

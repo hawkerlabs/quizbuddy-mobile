@@ -1,6 +1,6 @@
 package com.hawkerlabs.quizbuddy.domain.session
 
-import com.hawkerlabs.quizbuddy.data.api.model.question.Data
+import com.hawkerlabs.quizbuddy.data.api.model.question.QuestionDTO
 import com.hawkerlabs.quizbuddy.data.model.CurrentQuestion
 import com.hawkerlabs.quizbuddy.data.model.Question
 import com.hawkerlabs.quizbuddy.data.model.Session
@@ -11,7 +11,7 @@ import io.reactivex.Single
 interface SessionUseCase {
 
 
-    fun initSession(questions: List<Data>)
+    fun initSession(questions: List<QuestionDTO>)
 
 
     fun getPreviousQuestion(): Single<CurrentQuestion>

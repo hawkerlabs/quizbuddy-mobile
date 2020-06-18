@@ -6,6 +6,9 @@
 
     <dimen name="question_text_margin">7dp</dimen>
     <dimen name="font_body_size">14sp</dimen>
+    <dimen name="font_body_size_19">19sp</dimen>
+
+    <dimen name="space_4">4dp</dimen>
 
     <dimen name="space_8">8dp</dimen>
     <dimen name="space_18">18dp</dimen>
@@ -26,4 +29,10 @@
     <dimen name="spacing_xmlarge">40dp</dimen>
     <dimen name="spacing_xxlarge">50dp</dimen>
     <dimen name="spacing_xxxlarge">55dp</dimen>
+
+    <dimen name="list_item_spacing">3dp</dimen>
+
+    <dimen name="margin_normal">16dp</dimen>
+
+
 </resources>

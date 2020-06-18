@@ -6,6 +6,7 @@ import com.hawkerlabs.quizbuddy.presentation.category.viewmodel.CategoryViewMode
 import com.hawkerlabs.quizbuddy.presentation.question.viewmodel.QuestionViewModel
 import com.hawkerlabs.quizbuddy.presentation.result.viewmodel.ResultsViewModel
 import com.hawkerlabs.quizbuddy.presentation.session.SessionViewModel
+import com.hawkerlabs.quizbuddy.presentation.subject.viewmodel.SubjectsViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -34,5 +35,8 @@ abstract class ViewModelModule {
     internal abstract  fun bindCategoryViewModel(viewModel: CategoryViewModel) : ViewModel
 
 
-
+    @Binds
+    @IntoMap
+    @ViewModelKey(SubjectsViewModel::class)
+    internal abstract  fun bindSubjectsViewModel(viewModel: SubjectsViewModel) : ViewModel
 }

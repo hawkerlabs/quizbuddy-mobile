@@ -16,12 +16,17 @@ import com.hawkerlabs.quizbuddy.application.core.ViewModelFactory
 import com.hawkerlabs.quizbuddy.application.utils.Images
 import com.hawkerlabs.quizbuddy.databinding.CategoryFragmentBinding
 import com.hawkerlabs.quizbuddy.presentation.category.viewmodel.CategoryViewModel
+import com.hawkerlabs.quizbuddy.presentation.course.ui.CoursesListAdapter
 import com.hawkerlabs.quizbuddy.presentation.result.ui.ResultsFragmentDirections
 import com.hawkerlabs.quizbuddy.presentation.session.SessionViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.category_fragment.*
 import javax.inject.Inject
 
+
+/**
+ * The care
+ */
 class CategoryFragment : DaggerFragment() {
 
     private lateinit var binding: CategoryFragmentBinding
@@ -34,6 +39,8 @@ class CategoryFragment : DaggerFragment() {
 
 
     private lateinit var categoriesListAdapter: CategoriesListAdapter
+    private lateinit var coursesListAdapter: CoursesListAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,8 +48,6 @@ class CategoryFragment : DaggerFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.category_fragment, container, false)
-
-
 
 
         return binding.root
@@ -68,21 +73,23 @@ class CategoryFragment : DaggerFragment() {
     }
 
 
-
     /**
      * Fire up the adapter after get categories service call
      */
     private fun subscribeUi() {
-        categoryViewModel.getDisplayCategories.observe(
-            viewLifecycleOwner,
-            Observer { categoriesListItemViewModel ->
-                refreshLayout.isRefreshing = false
-                categoriesListAdapter = CategoriesListAdapter()
-                categoriesListAdapter.onResults(categoriesListItemViewModel)
-                list.adapter = categoriesListAdapter
+        categoryViewModel.getPageState().observe(viewLifecycleOwner, Observer {
 
-            })
+            refreshLayout.isRefreshing = false
+            categoriesListAdapter = CategoriesListAdapter()
+            categoriesListAdapter.onResults(it.categories)
+            list.adapter = categoriesListAdapter
 
+
+            coursesListAdapter = CoursesListAdapter()
+            coursesListAdapter.onResults(it.courses)
+            newCourseRecyclerView.adapter = coursesListAdapter
+
+        })
 
 
         //On refresh call the viewmodels refresh method which will initiate the service call allover again
@@ -90,6 +97,9 @@ class CategoryFragment : DaggerFragment() {
             refreshLayout.isRefreshing = true
             categoryViewModel.onRefresh()
         }
+
+
+
 
 
     }

@@ -16,6 +16,8 @@ import androidx.navigation.Navigation
 import com.google.android.material.snackbar.Snackbar
 import com.hawkerlabs.quizbuddy.R
 import com.hawkerlabs.quizbuddy.application.core.ViewModelFactory
+import com.hawkerlabs.quizbuddy.data.repository.Mode
+import com.hawkerlabs.quizbuddy.data.repository.SubjectsRepository
 import com.hawkerlabs.quizbuddy.databinding.QuestionFragmentBinding
 import com.hawkerlabs.quizbuddy.presentation.session.SessionViewModel
 import dagger.android.support.DaggerFragment
@@ -38,6 +40,8 @@ class QuestionFragment : DaggerFragment() {
     private lateinit var categoryId: String
 
     private lateinit var binding: QuestionFragmentBinding
+
+    private lateinit var mode : Mode
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,11 +50,16 @@ class QuestionFragment : DaggerFragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.question_fragment, container, false)
 
 
-        categoryId = arguments?.getString("categoryId") ?: ""
+        val categoryId = arguments?.getString("categoryId") ?: ""
+
+        mode = if(categoryId.isEmpty() || categoryId.isBlank()){
+            val subjectId = arguments?.getString("subjectId") ?: ""
+            Mode.Subject(subjectId)
+        }else {
+            Mode.Category(categoryId)
+        }
         return binding.root
     }
-
-
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -114,7 +123,7 @@ class QuestionFragment : DaggerFragment() {
         })
 
 
-        sessionViewModel.sessionState.observe(viewLifecycleOwner, Observer {sessionState ->
+        sessionViewModel.sessionState.observe(viewLifecycleOwner, Observer { sessionState ->
             when (sessionState) {
                 SessionViewModel.SessionState.FIRST_QUESTION -> binding.previous.isEnabled = false
                 SessionViewModel.SessionState.ACTIVE_STATE -> binding.previous.isEnabled = true
@@ -157,13 +166,12 @@ class QuestionFragment : DaggerFragment() {
         val builder = AlertDialog.Builder(this.requireContext())
         builder.setTitle(R.string.ALERT_TITLE)
         builder.setMessage(R.string.ALERT_TEXT)
-        builder.setPositiveButton(R.string.CONTINUE
-        ) { _, _ ->  Navigation.findNavController(binding.root).popBackStack() }
+        builder.setPositiveButton(
+            R.string.CONTINUE
+        ) { _, _ -> Navigation.findNavController(binding.root).popBackStack() }
         builder.setNegativeButton(R.string.CANCEL, null)
         builder.show()
     }
-
-
 
 
     private fun initViewModels() {
@@ -174,9 +182,11 @@ class QuestionFragment : DaggerFragment() {
 
 
         }
-        sessionViewModel.onNewSession(categoryId)
 
 
+//        sessionViewModel.onNewSession(categoryId)
+
+        sessionViewModel.onNewSession(mode)
     }
 
 }

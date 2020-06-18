@@ -2,11 +2,10 @@ package com.hawkerlabs.quizbuddy.domain.session.impl
 
 import com.hawkerlabs.quizbuddy.application.core.dagger.module.SCHEDULER_IO
 import com.hawkerlabs.quizbuddy.application.core.dagger.module.SCHEDULER_MAIN_THREAD
-import com.hawkerlabs.quizbuddy.data.api.model.question.Data
+import com.hawkerlabs.quizbuddy.data.api.model.question.QuestionDTO
 import com.hawkerlabs.quizbuddy.data.model.CurrentQuestion
 import com.hawkerlabs.quizbuddy.data.model.Question
 import com.hawkerlabs.quizbuddy.data.model.Result
-import com.hawkerlabs.quizbuddy.domain.question.GetQuestionsByCategoryUseCase
 import com.hawkerlabs.quizbuddy.domain.session.SessionUseCase
 import io.reactivex.Scheduler
 import io.reactivex.Single
@@ -14,12 +13,11 @@ import javax.inject.Inject
 import javax.inject.Named
 
 class SessionUseCaseImpl @Inject constructor(
-    private val getQuestionsByCategoryUseCase: GetQuestionsByCategoryUseCase,
     @Named(SCHEDULER_IO) val subscribeOnScheduler: Scheduler,
     @Named(SCHEDULER_MAIN_THREAD) val observeOnScheduler: Scheduler
 ) : SessionUseCase {
 
-    private var questions = arrayOf<Data>()
+    private var questions = arrayOf<QuestionDTO>()
 
     private var correctAnswerCount: Int = 0
 
@@ -46,7 +44,7 @@ class SessionUseCaseImpl @Inject constructor(
             )
         }
 
-        return Single.just(CurrentQuestion(Data(), "", -1))
+        return Single.just(CurrentQuestion(QuestionDTO(), "", -1))
 
     }
 
@@ -69,7 +67,7 @@ class SessionUseCaseImpl @Inject constructor(
             )
         }
 
-        return Single.just(CurrentQuestion(Data(), "", -1))
+        return Single.just(CurrentQuestion(QuestionDTO(), "", -1))
 
     }
 
@@ -108,7 +106,7 @@ class SessionUseCaseImpl @Inject constructor(
     /**
      * Initialize test session
      */
-    override fun initSession(questionSet: List<Data>) {
+    override fun initSession(questionSet: List<QuestionDTO>) {
         currentIndex = -1
         questions = questionSet.toTypedArray()
 

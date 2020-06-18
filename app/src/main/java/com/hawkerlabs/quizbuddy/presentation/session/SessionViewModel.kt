@@ -6,21 +6,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hawkerlabs.quizbuddy.application.core.dagger.module.SCHEDULER_IO
 import com.hawkerlabs.quizbuddy.application.core.dagger.module.SCHEDULER_MAIN_THREAD
-import com.hawkerlabs.quizbuddy.data.api.model.question.Data
+import com.hawkerlabs.quizbuddy.data.api.model.question.QuestionDTO
 import com.hawkerlabs.quizbuddy.data.model.*
+import com.hawkerlabs.quizbuddy.data.repository.Mode
 
 
-import com.hawkerlabs.quizbuddy.domain.question.GetQuestionsByCategoryUseCase
+import com.hawkerlabs.quizbuddy.domain.quiz.QuizUseCase
 import com.hawkerlabs.quizbuddy.domain.session.SessionUseCase
 import io.reactivex.Scheduler
 import javax.inject.Inject
 import javax.inject.Named
 
-class SessionViewModel @Inject constructor(private val sessionUseCase : SessionUseCase,
-                                           private val getQuestionsByCategoryUseCase : GetQuestionsByCategoryUseCase,
-                                           @Named(SCHEDULER_IO) val subscribeOnScheduler: Scheduler,
-                                           @Named(SCHEDULER_MAIN_THREAD) val observeOnScheduler: Scheduler
-): ViewModel(){
+class SessionViewModel @Inject constructor(
+    private val sessionUseCase: SessionUseCase,
+    private val getQuizUseCase: QuizUseCase,
+    @Named(SCHEDULER_IO) val subscribeOnScheduler: Scheduler,
+    @Named(SCHEDULER_MAIN_THREAD) val observeOnScheduler: Scheduler
+) : ViewModel() {
 
     /**
      * Enum class to track button states
@@ -30,6 +32,7 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
         ACTIVE_STATE,
         LAST_QUESTION
     }
+
     private val _sessionState =
         MutableLiveData<SessionState>(SessionState.FIRST_QUESTION)
     val sessionState: LiveData<SessionState> = _sessionState
@@ -41,11 +44,8 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
     private var selectedId = -1
 
 
-
     private var _currentIndex = MutableLiveData<String>()
     val currentIndex: LiveData<String> = _currentIndex
-
-
 
 
     private var _finishTest = MutableLiveData<Boolean>()
@@ -67,31 +67,31 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
 
 
     @SuppressLint("CheckResult")
-    private fun getNextQuestion(){
+    private fun getNextQuestion() {
         sessionUseCase.getNextQuestion().subscribeOn(subscribeOnScheduler)
             .observeOn(observeOnScheduler)
             .subscribe(this::onQuestionResponse, this::onError)
     }
 
-    fun onOptionSelect(selectedId :Int ){
+    fun onOptionSelect(selectedId: Int) {
         this.selectedId = selectedId
     }
 
 
-    fun onNext(){
+    fun onNext() {
         getNextQuestion()
     }
 
 
-    private fun onQuestionResponse( currentQuestion : CurrentQuestion){
+    private fun onQuestionResponse(currentQuestion: CurrentQuestion) {
 
 
-        val question  = currentQuestion.question
+        val question = currentQuestion.question
         val currentIndex = currentQuestion.index
 
-        if(currentQuestion.questionIndex == 0){
+        if (currentQuestion.questionIndex == 0) {
             _sessionState.value = SessionState.FIRST_QUESTION
-        } else{
+        } else {
             _sessionState.value = SessionState.ACTIVE_STATE
         }
 
@@ -99,17 +99,17 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
         var count = 1
         var rightAnswer = 0
         question.options.map {
-            var currentOption = CurrentOption(count++, it.option, false, it.isRightAnswer )
-            currentOptions.add( currentOption)
+            var currentOption = CurrentOption(count++, it.option, false, it.isRightAnswer)
+            currentOptions.add(currentOption)
 
-            if(it.isRightAnswer){
+            if (it.isRightAnswer) {
                 rightAnswer = currentOption.id
             }
         }
 
-        var  currentQuestion = Question(question.id, question.question, currentOptions,rightAnswer )
+        var currentQuestion = Question(question.id, question.question, currentOptions, rightAnswer)
 
-        if(question.options.isEmpty()){
+        if (question.options.isEmpty()) {
             _finishTest.value = true
             onFinishTest()
             getTestResults()
@@ -120,12 +120,11 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
         }
 
 
-
     }
 
 
     @SuppressLint("CheckResult")
-    private fun getTestResults(){
+    private fun getTestResults() {
         sessionUseCase.getTestResults().subscribeOn(subscribeOnScheduler)
             .observeOn(observeOnScheduler)
             .subscribe(this::onTestResults, this::onError)
@@ -143,7 +142,7 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
     /**
      * Set the question value
      */
-    private fun onResponse(questions: List<Data>) {
+    private fun onResponse(questions: List<QuestionDTO>) {
         sessionUseCase.initSession(questions)
         getNextQuestion()
 
@@ -154,7 +153,7 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
     /**
      *
      */
-    fun onFinishTest(){
+    fun onFinishTest() {
         sessionUseCase.finishTest()
     }
 
@@ -164,12 +163,12 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
      * after we get the questions from the service call we set the value of the questions set again in onResponse
      */
     @SuppressLint("CheckResult")
-    fun onNewSession(categoryId : String){
+    fun onNewSession(mode: Mode) {
 
         _finishTest.value = false
         _currentQuestion.value = null
 
-        getQuestionsByCategoryUseCase.invoke(categoryId).subscribeOn(subscribeOnScheduler)
+        getQuizUseCase.invoke(mode).subscribeOn(subscribeOnScheduler)
             .observeOn(observeOnScheduler)
             .subscribe(this::onResponse, this::onError)
 
@@ -177,7 +176,7 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
 
 
     @SuppressLint("CheckResult")
-    fun onPrevious(){
+    fun onPrevious() {
 
 
         sessionUseCase.getPreviousQuestion().subscribeOn(subscribeOnScheduler)
@@ -187,10 +186,9 @@ class SessionViewModel @Inject constructor(private val sessionUseCase : SessionU
     }
 
 
+    fun onSubmit() {
 
-    fun onSubmit(){
-
-        _currentQuestion.value?.let { sessionUseCase.onAnswerSubmit (selectedId, it) }
+        _currentQuestion.value?.let { sessionUseCase.onAnswerSubmit(selectedId, it) }
     }
 
     private fun onError(error: Throwable) {

@@ -9,7 +9,7 @@ import retrofit2.http.Query
 
 interface QuestionsApi {
     /**
-     * Get Films
+     * Get Questions
      */
     @GET(Endpoints.QUESTIONS)
     fun getQuestionsByCategory(@Query("category") categoryId: String): Single<QuestionsResponse>
